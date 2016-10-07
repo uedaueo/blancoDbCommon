@@ -79,8 +79,6 @@ public class BlancoDbXmlParser {
     /**
      * SQL定義書の中間XMLを入力に、SQL定義書情報を収集します。
      * 
-     * @param conn
-     *            データベース接続設定情報。
      * @param fileSqlForm
      *            処理を行いたいSQL定義書のXML中間形式ファイル。
      * @return 解析後のSQL定義書のリスト。
@@ -145,8 +143,6 @@ public class BlancoDbXmlParser {
      * 
      * @param eleSheet
      *            シートエレメント。
-     * @param conn
-     *            blancoデータベース接続オブジェクト。
      * @param resultBlancoDbDef
      *            blancoDb定義情報。
      */
@@ -182,7 +178,7 @@ public class BlancoDbXmlParser {
     /**
      * 与えられた共通エレメントを解析して情報を展開します。
      * 
-     * @param elementSheet
+     * @param eleSheet
      *            シートオブジェクト。
      * @return 抽象クエリオブジェクト。
      */
@@ -223,6 +219,12 @@ public class BlancoDbXmlParser {
         fSqlInfo.setSingle(BlancoStringUtil.null2Blank(
                 BlancoXmlUtil.getTextContent(elementCommon, "single")).equals(
                 "true"));
+
+        fSqlInfo.setConnectionMethod(BlancoStringUtil.null2Blank(
+                BlancoXmlUtil.getTextContent(elementCommon, "connectionMethod")));
+
+        fSqlInfo.setConnectTo(BlancoStringUtil.null2Blank(
+                BlancoXmlUtil.getTextContent(elementCommon, "connectTo")));
 
         if (fSqlInfo.getType() == BlancoDbSqlInfoTypeStringGroup.ITERATOR) {
             // 検索型の場合にのみスクロール属性および更新可能属性を読み込みます。

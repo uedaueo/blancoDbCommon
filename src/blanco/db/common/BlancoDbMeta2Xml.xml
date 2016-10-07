@@ -47,6 +47,14 @@
           <value>Timeout</value>
           <value>タイムアウト</value>
         </propertykey>
+        <propertykey name="connectionMethod" waitX="2">
+          <value>connectionMethod</value>
+          <value>接続方式</value>
+        </propertykey>
+        <propertykey name="connectTo" waitX="2">
+          <value>connectTo</value>
+          <value>接続先</value>
+        </propertykey>
 
         <valuemapping>
           <result>true</result>
@@ -115,6 +123,22 @@
         <valuemapping>
           <result>sensitive</result>
           <source>SENSITIVE</source>
+        </valuemapping>
+        <valuemapping>
+          <result>standard</result>
+          <source>STANDARD</source>
+        </valuemapping>
+        <valuemapping>
+          <result>original</result>
+          <source>ORIGINAL</source>
+        </valuemapping>
+        <valuemapping>
+          <result>default</result>
+          <source>DEFAULT</source>
+        </valuemapping>
+        <valuemapping>
+          <result>alternative</result>
+          <source>ALTERNATIVE</source>
         </valuemapping>
       </propertyblock>
 
