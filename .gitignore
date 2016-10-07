@@ -1,2 +1,15 @@
-/bin/
-/blancoDbCommon-*-src.zip
+.svn
+.classpath
+.project
+.idea
+.DS_Store
+/tmp
+/tmp2
+/tmp3
+/blanco/main
+/blanco.java/main
+/blanco.php/main
+/bin
+/classes
+build.properties
+*.iml
