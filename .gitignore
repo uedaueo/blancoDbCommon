@@ -13,3 +13,5 @@
 /classes
 build.properties
 *.iml
+/target/
+~$*

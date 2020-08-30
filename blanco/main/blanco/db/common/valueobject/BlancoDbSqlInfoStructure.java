@@ -1,6 +1,3 @@
-/*
- * このソースコードは blanco Frameworkにより自動生成されました。
- */
 package blanco.db.common.valueobject;
 
 import java.util.List;
@@ -48,7 +45,7 @@ public class BlancoDbSqlInfoStructure {
      * SQL入力パラメータのリスト。
      *
      * フィールド: [inParameterList]。
-     * デフォルト: [new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>()]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      */
     private List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> fInParameterList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
 
@@ -56,7 +53,7 @@ public class BlancoDbSqlInfoStructure {
      * (caller)呼出型SQLのSQL出力パラメータのリスト。Callerの場合にのみ利用されます。
      *
      * フィールド: [outParameterList]。
-     * デフォルト: [new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>()]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      */
     private List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> fOutParameterList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
 
@@ -64,7 +61,7 @@ public class BlancoDbSqlInfoStructure {
      * (iterator)検索型SQLの検索結果の列リスト。Iteratorの場合にのみ利用されます。
      *
      * フィールド: [resultSetColumnList]。
-     * デフォルト: [new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>()]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      */
     private List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> fResultSetColumnList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
 
@@ -114,6 +111,22 @@ public class BlancoDbSqlInfoStructure {
      * デフォルト: [-1]。
      */
     private int fStatementTimeout = -1;
+
+    /**
+     * 接続方式：処理系標準(STANDARD)または独自実装(ORIGINAL)
+     *
+     * フィールド: [connectionMethod]。
+     * デフォルト: [&quot;STANDARD&quot;]。
+     */
+    private String fConnectionMethod = "STANDARD";
+
+    /**
+     * 接続先：デフォルト(DEFAULT)または代替接続(ALTERNATIVE)
+     *
+     * フィールド: [connectTo]。
+     * デフォルト: [&quot;DEFAULT&quot;]。
+     */
+    private String fConnectTo = "DEFAULT";
 
     /**
      * フィールド [name] の値を設定します。
@@ -240,7 +253,7 @@ public class BlancoDbSqlInfoStructure {
      * フィールド [inParameterList] の値を取得します。
      *
      * フィールドの説明: [SQL入力パラメータのリスト。]。
-     * デフォルト: [new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>()]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      *
      * @return フィールド[inParameterList]から取得した値。
      */
@@ -263,7 +276,7 @@ public class BlancoDbSqlInfoStructure {
      * フィールド [outParameterList] の値を取得します。
      *
      * フィールドの説明: [(caller)呼出型SQLのSQL出力パラメータのリスト。Callerの場合にのみ利用されます。]。
-     * デフォルト: [new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>()]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      *
      * @return フィールド[outParameterList]から取得した値。
      */
@@ -286,7 +299,7 @@ public class BlancoDbSqlInfoStructure {
      * フィールド [resultSetColumnList] の値を取得します。
      *
      * フィールドの説明: [(iterator)検索型SQLの検索結果の列リスト。Iteratorの場合にのみ利用されます。]。
-     * デフォルト: [new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>()]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      *
      * @return フィールド[resultSetColumnList]から取得した値。
      */
@@ -432,6 +445,52 @@ public class BlancoDbSqlInfoStructure {
     }
 
     /**
+     * フィールド [connectionMethod] の値を設定します。
+     *
+     * フィールドの説明: [接続方式：処理系標準(STANDARD)または独自実装(ORIGINAL)]。
+     *
+     * @param argConnectionMethod フィールド[connectionMethod]に設定する値。
+     */
+    public void setConnectionMethod(final String argConnectionMethod) {
+        fConnectionMethod = argConnectionMethod;
+    }
+
+    /**
+     * フィールド [connectionMethod] の値を取得します。
+     *
+     * フィールドの説明: [接続方式：処理系標準(STANDARD)または独自実装(ORIGINAL)]。
+     * デフォルト: [&quot;STANDARD&quot;]。
+     *
+     * @return フィールド[connectionMethod]から取得した値。
+     */
+    public String getConnectionMethod() {
+        return fConnectionMethod;
+    }
+
+    /**
+     * フィールド [connectTo] の値を設定します。
+     *
+     * フィールドの説明: [接続先：デフォルト(DEFAULT)または代替接続(ALTERNATIVE)]。
+     *
+     * @param argConnectTo フィールド[connectTo]に設定する値。
+     */
+    public void setConnectTo(final String argConnectTo) {
+        fConnectTo = argConnectTo;
+    }
+
+    /**
+     * フィールド [connectTo] の値を取得します。
+     *
+     * フィールドの説明: [接続先：デフォルト(DEFAULT)または代替接続(ALTERNATIVE)]。
+     * デフォルト: [&quot;DEFAULT&quot;]。
+     *
+     * @return フィールド[connectTo]から取得した値。
+     */
+    public String getConnectTo() {
+        return fConnectTo;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -460,7 +519,101 @@ public class BlancoDbSqlInfoStructure {
         buf.append(",dynamic-sql=" + fDynamicSql);
         buf.append(",use-bean-parameter=" + fUseBeanParameter);
         buf.append(",statementTimeout=" + fStatementTimeout);
+        buf.append(",connectionMethod=" + fConnectionMethod);
+        buf.append(",connectTo=" + fConnectTo);
         buf.append("]");
         return buf.toString();
+    }
+
+    /**
+     * このバリューオブジェクトを指定のターゲットに複写します。
+     *
+     * <P>使用上の注意</P>
+     * <UL>
+     * <LI>オブジェクトのシャロー範囲のみ複写処理対象となります。
+     * <LI>オブジェクトが循環参照している場合には、このメソッドは使わないでください。
+     * </UL>
+     *
+     * @param target target value object.
+     */
+    public void copyTo(final BlancoDbSqlInfoStructure target) {
+        if (target == null) {
+            throw new IllegalArgumentException("Bug: BlancoDbSqlInfoStructure#copyTo(target): argument 'target' is null");
+        }
+
+        // No needs to copy parent class.
+
+        // Name: fName
+        // Type: java.lang.String
+        target.fName = this.fName;
+        // Name: fPackage
+        // Type: java.lang.String
+        target.fPackage = this.fPackage;
+        // Name: fType
+        // Type: int
+        target.fType = this.fType;
+        // Name: fDescription
+        // Type: java.lang.String
+        target.fDescription = this.fDescription;
+        // Name: fQuery
+        // Type: java.lang.String
+        target.fQuery = this.fQuery;
+        // Name: fInParameterList
+        // Type: java.util.List
+        if (this.fInParameterList != null) {
+            final java.util.Iterator<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> iterator = this.fInParameterList.iterator();
+            for (; iterator.hasNext();) {
+                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopSource = iterator.next();
+                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopTarget = null;
+                // フィールド[generics]はサポート外の型[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
+                target.fInParameterList.add(loopTarget);
+            }
+        }
+        // Name: fOutParameterList
+        // Type: java.util.List
+        if (this.fOutParameterList != null) {
+            final java.util.Iterator<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> iterator = this.fOutParameterList.iterator();
+            for (; iterator.hasNext();) {
+                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopSource = iterator.next();
+                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopTarget = null;
+                // フィールド[generics]はサポート外の型[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
+                target.fOutParameterList.add(loopTarget);
+            }
+        }
+        // Name: fResultSetColumnList
+        // Type: java.util.List
+        if (this.fResultSetColumnList != null) {
+            final java.util.Iterator<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> iterator = this.fResultSetColumnList.iterator();
+            for (; iterator.hasNext();) {
+                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopSource = iterator.next();
+                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopTarget = null;
+                // フィールド[generics]はサポート外の型[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
+                target.fResultSetColumnList.add(loopTarget);
+            }
+        }
+        // Name: fSingle
+        // Type: boolean
+        target.fSingle = this.fSingle;
+        // Name: fScroll
+        // Type: int
+        target.fScroll = this.fScroll;
+        // Name: fUpdatable
+        // Type: boolean
+        target.fUpdatable = this.fUpdatable;
+        // Name: fDynamicSql
+        // Type: boolean
+        target.fDynamicSql = this.fDynamicSql;
+        // Name: fUseBeanParameter
+        // Type: boolean
+        target.fUseBeanParameter = this.fUseBeanParameter;
+        // Name: fStatementTimeout
+        // Type: int
+        target.fStatementTimeout = this.fStatementTimeout;
+        // Name: fConnectionMethod
+        // Type: java.lang.String
+        target.fConnectionMethod = this.fConnectionMethod;
+        // Name: fConnectTo
+        // Type: java.lang.String
+        target.fConnectTo = this.fConnectTo;
     }
 }

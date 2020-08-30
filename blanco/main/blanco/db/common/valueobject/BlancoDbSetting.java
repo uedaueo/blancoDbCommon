@@ -1,6 +1,3 @@
-/*
- * このソースコードは blanco Frameworkにより自動生成されました。
- */
 package blanco.db.common.valueobject;
 
 /**
@@ -578,5 +575,79 @@ public class BlancoDbSetting {
         buf.append(",convertStringToMsWindows31jUnicode=" + fConvertStringToMsWindows31jUnicode);
         buf.append("]");
         return buf.toString();
+    }
+
+    /**
+     * このバリューオブジェクトを指定のターゲットに複写します。
+     *
+     * <P>使用上の注意</P>
+     * <UL>
+     * <LI>オブジェクトのシャロー範囲のみ複写処理対象となります。
+     * <LI>オブジェクトが循環参照している場合には、このメソッドは使わないでください。
+     * </UL>
+     *
+     * @param target target value object.
+     */
+    public void copyTo(final BlancoDbSetting target) {
+        if (target == null) {
+            throw new IllegalArgumentException("Bug: BlancoDbSetting#copyTo(target): argument 'target' is null");
+        }
+
+        // No needs to copy parent class.
+
+        // Name: fTargetDir
+        // Type: java.lang.String
+        target.fTargetDir = this.fTargetDir;
+        // Name: fBasePackage
+        // Type: java.lang.String
+        target.fBasePackage = this.fBasePackage;
+        // Name: fFailonerror
+        // Type: boolean
+        target.fFailonerror = this.fFailonerror;
+        // Name: fLogging
+        // Type: boolean
+        target.fLogging = this.fLogging;
+        // Name: fLoggingMode
+        // Type: int
+        target.fLoggingMode = this.fLoggingMode;
+        // Name: fLoggingsql
+        // Type: boolean
+        target.fLoggingsql = this.fLoggingsql;
+        // Name: fJdbcdriver
+        // Type: java.lang.String
+        target.fJdbcdriver = this.fJdbcdriver;
+        // Name: fJdbcurl
+        // Type: java.lang.String
+        target.fJdbcurl = this.fJdbcurl;
+        // Name: fJdbcuser
+        // Type: java.lang.String
+        target.fJdbcuser = this.fJdbcuser;
+        // Name: fJdbcpassword
+        // Type: java.lang.String
+        target.fJdbcpassword = this.fJdbcpassword;
+        // Name: fJdbcdriverfile
+        // Type: java.lang.String
+        target.fJdbcdriverfile = this.fJdbcdriverfile;
+        // Name: fSchema
+        // Type: java.lang.String
+        target.fSchema = this.fSchema;
+        // Name: fDriverName
+        // Type: int
+        target.fDriverName = this.fDriverName;
+        // Name: fRuntimePackage
+        // Type: java.lang.String
+        target.fRuntimePackage = this.fRuntimePackage;
+        // Name: fStatementTimeout
+        // Type: int
+        target.fStatementTimeout = this.fStatementTimeout;
+        // Name: fExecuteSql
+        // Type: int
+        target.fExecuteSql = this.fExecuteSql;
+        // Name: fEncoding
+        // Type: java.lang.String
+        target.fEncoding = this.fEncoding;
+        // Name: fConvertStringToMsWindows31jUnicode
+        // Type: boolean
+        target.fConvertStringToMsWindows31jUnicode = this.fConvertStringToMsWindows31jUnicode;
     }
 }

@@ -1,6 +1,3 @@
-/*
- * このソースコードは blanco Frameworkにより自動生成されました。
- */
 package blanco.db.common.resourcebundle;
 
 import java.math.BigDecimal;
@@ -130,6 +127,86 @@ public class BlancoDbCommonResourceBundle {
         try {
             if (fResourceBundle != null) {
                 strFormat = fResourceBundle.getString("SELECT_UPDATABLE.SCROLL");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        // 置換文字列はひとつもありません。
+        return strFormat;
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[CONNECTIONMETHOD.STANDARD]
+     *
+     * [standard] (ja)<br>
+     *
+     * @return key[CONNECTIONMETHOD.STANDARD]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getConnectionmethodStandard() {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "standard";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("CONNECTIONMETHOD.STANDARD");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        // 置換文字列はひとつもありません。
+        return strFormat;
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[CONNECTIONMETHOD.ORIGINAL]
+     *
+     * [original] (ja)<br>
+     *
+     * @return key[CONNECTIONMETHOD.ORIGINAL]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getConnectionmethodOriginal() {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "original";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("CONNECTIONMETHOD.ORIGINAL");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        // 置換文字列はひとつもありません。
+        return strFormat;
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[CONNECTTO.DEFAULT]
+     *
+     * [default] (ja)<br>
+     *
+     * @return key[CONNECTTO.DEFAULT]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getConnecttoDefault() {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "default";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("CONNECTTO.DEFAULT");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        // 置換文字列はひとつもありません。
+        return strFormat;
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[CONNECTTO.ALTERNATIVE]
+     *
+     * [alternative] (ja)<br>
+     *
+     * @return key[CONNECTTO.ALTERNATIVE]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getConnecttoAlternative() {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "alternative";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("CONNECTTO.ALTERNATIVE");
             }
         } catch (MissingResourceException ex) {
         }
