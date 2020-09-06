@@ -1,7 +1,7 @@
 /*
  * blancoDb
  * Copyright (C) 2004-2006 Yasuo Nakanishi
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -24,6 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMResult;
 
+import blanco.db.common.valueobject.BlancoDbDynamicConditionStructure;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -40,13 +41,13 @@ import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
 
 /**
  * SQL定義書の中間XMLを読み込んでJavaオブジェクト化します。
- * 
+ *
  * @author IGA Tosiki
  */
 public class BlancoDbXmlParser {
 	/**
 	 * C#.NET の  SQL 入力パラメータの挙動の構造的な問題に対する対処方法。
-	 * 
+	 *
 	 * FIXME いずれ、この変数を外部化してください。
 	 */
 	private static final boolean IS_FORCE_CS_DOTNET_STRING_AS_NVARCHAR = false;
@@ -67,6 +68,11 @@ public class BlancoDbXmlParser {
     private static final String ELEMENT_INPARAMETERS = "blancodb-inparameters";
 
     /**
+     * SQL動的条件式定義が蓄えられているエレメント名。
+     */
+    private static final String ELEMENT_DYNAMICCONDITIONS = "blancodb-dynamicconditions";
+
+    /**
      * SQL出力パラメータが蓄えられているエレメント名。
      */
     private static final String ELEMENT_OUTPARAMETERS = "blancodb-outparameters";
@@ -78,7 +84,7 @@ public class BlancoDbXmlParser {
 
     /**
      * SQL定義書の中間XMLを入力に、SQL定義書情報を収集します。
-     * 
+     *
      * @param fileSqlForm
      *            処理を行いたいSQL定義書のXML中間形式ファイル。
      * @return 解析後のSQL定義書のリスト。
@@ -140,7 +146,7 @@ public class BlancoDbXmlParser {
 
     /**
      * 与えられたシートエレメントを展開します。
-     * 
+     *
      * @param eleSheet
      *            シートエレメント。
      * @param resultBlancoDbDef
@@ -157,6 +163,9 @@ public class BlancoDbXmlParser {
 
         // SQL入力パラメータを展開します。
         expandInParameter(eleSheet, fSqlInfo);
+
+        // SQL動的条件式定義を展開します。
+        expandDynamicCondition(eleSheet, fSqlInfo);
 
         // SQL出力パラメータを展開します。
         expandOutParameter(eleSheet, fSqlInfo);
@@ -177,7 +186,7 @@ public class BlancoDbXmlParser {
 
     /**
      * 与えられた共通エレメントを解析して情報を展開します。
-     * 
+     *
      * @param eleSheet
      *            シートオブジェクト。
      * @return 抽象クエリオブジェクト。
@@ -267,7 +276,7 @@ public class BlancoDbXmlParser {
 
     /**
      * 与えられたシートを解析してSQL入力パラメータ情報を展開します。
-     * 
+     *
      * @param elementSheet
      *            シートオブジェクト。
      * @param sqlInfo
@@ -341,8 +350,127 @@ public class BlancoDbXmlParser {
     }
 
     /**
+     * 与えられたシートを解析してSQL動的条件式定義情報を展開します。
+     *
+     * @param elementSheet
+     *            シートオブジェクト。
+     * @param sqlInfo
+     *            抽象クエリオブジェクト。
+     */
+    private void expandDynamicCondition(final Element elementSheet,
+                                   final BlancoDbSqlInfoStructure sqlInfo) {
+        final Element elementBlancoDbDynamicConditions = BlancoXmlUtil.getElement(
+                elementSheet, ELEMENT_DYNAMICCONDITIONS);
+        if (elementBlancoDbDynamicConditions == null) {
+            return;
+        }
+
+        final NodeList nodeList = elementBlancoDbDynamicConditions
+                .getElementsByTagName("dynamicconditions");
+        if (nodeList == null) {
+            // SQL入力パラメータはありません。
+            return;
+        }
+        final int nodeLength = nodeList.getLength();
+        for (int index = 0; index < nodeLength; index++) {
+            final Node nodeLook = nodeList.item(index);
+            if (nodeLook instanceof Element == false) {
+                continue;
+            }
+
+            final BlancoDbDynamicConditionStructure dynamicCondition = new BlancoDbDynamicConditionStructure();
+
+            String tag = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "tag"));
+            if (tag.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr010(sqlInfo.getName()));
+            }
+            dynamicCondition.setTag(tag);
+
+            String key = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "key"));
+            if (key.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr011(sqlInfo.getName(), tag));
+            }
+            dynamicCondition.setKey(key);
+
+            String condition = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "condition")
+            );
+            if (condition.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr012(sqlInfo.getName(), tag));
+            }
+            dynamicCondition.setCondition(condition);
+
+            String targetItem = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "item")
+            );
+            if (targetItem.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr013(sqlInfo.getName(), condition));
+            }
+            dynamicCondition.setItem(targetItem);
+
+            String comparison = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "comparison")
+            );
+            if ("COMPARE".equals(condition) && comparison.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr014(sqlInfo.getName(), condition));
+            }
+            dynamicCondition.setComparison(comparison);
+
+            String logical = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "logical")
+            );
+            if (!"ITEMONLY".equals(condition) && logical.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr015(sqlInfo.getName(), condition));
+            }
+            dynamicCondition.setLogical(logical);
+
+            String type = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "type")
+            );
+            if (!"ITEMONLY".equals(condition) && type.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr016(sqlInfo.getName(), condition));
+            }
+            dynamicCondition.setType(type);
+
+            sqlInfo.getDynamicConditionList().add(dynamicCondition);
+
+            /*
+             * この動的条件句が対象とする型の情報を、dbColumnの形で作成しておく
+             */
+            BlancoDbMetaDataColumnStructure columnStructure = new BlancoDbMetaDataColumnStructure();
+            dynamicCondition.setDbCoumn(columnStructure);
+            columnStructure.setName(tag);
+            if ("ITEMONLY".equals(type)) {
+                /* パラメータなし */
+                columnStructure.setTypeName(null);
+                columnStructure.setDataType(Types.OTHER);
+            } else {
+                columnStructure.setTypeName(dynamicCondition.getType());
+                columnStructure.setDataType(BlancoDbMetaDataUtil
+                        .convertJdbcDataType2Int(dynamicCondition.getType()));
+            }
+        }
+    }
+
+    /**
      * 与えられたシートを解析してSQL出力パラメータ情報を展開します。
-     * 
+     *
      * @param elementSheet
      *            シートオブジェクト。
      * @param sqlInfo
@@ -422,7 +550,7 @@ public class BlancoDbXmlParser {
 
     /**
      * 与えられたシートを解析してSQL文に関する情報を展開します。
-     * 
+     *
      * @param elementSheet
      *            シートオブジェクト。
      * @param sqlInfo
@@ -460,11 +588,11 @@ public class BlancoDbXmlParser {
     /**
      * 旧バージョンのSQL定義書において、SQL入力／出力パラメータの型名にJava/C#.NETの型名が与えられる。この型名を
      * java.sql.Typesの型名に読み替えるためのルーチン。
-     * 
+     *
      * このメソッドは旧バージョンの定義書の読込処理の目的で存在します。
-     * 
+     *
      * TODO Java言語およびC#.NET言語に依存した記述があります。
-     * 
+     *
      * @param type
      * @param columnStructure
      */

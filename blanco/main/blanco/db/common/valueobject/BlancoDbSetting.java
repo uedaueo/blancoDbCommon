@@ -138,6 +138,41 @@ public class BlancoDbSetting {
     private boolean fConvertStringToMsWindows31jUnicode = false;
 
     /**
+     * ランタイムを使用してインタフェイスやアノテーションを設定します。
+     *
+     * フィールド: [useRuntime]。
+     * デフォルト: [false]。
+     */
+    private boolean fUseRuntime = false;
+
+    /**
+     * 出力先フォルダの書式を指定します。&lt;br&gt;
+     *
+     * blanco: [targetdir]/main<br>
+     * maven: [targetdir]/main/java<br>
+     * free: [targetdir](targetdirが無指定の場合はblanco/main)
+     * フィールド: [targetStyle]。
+     * デフォルト: [&quot;blanco&quot;]。
+     */
+    private String fTargetStyle = "blanco";
+
+    /**
+     * 行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。
+     *
+     * フィールド: [lineSeparator]。
+     * デフォルト: [&quot;LF&quot;]。
+     */
+    private String fLineSeparator = "LF";
+
+    /**
+     * 自動生成に関してより詳細な情報を出力します。
+     *
+     * フィールド: [verbose]。
+     * デフォルト: [false]。
+     */
+    private boolean fVerbose = false;
+
+    /**
      * フィールド [TargetDir] の値を設定します。
      *
      * フィールドの説明: [出力先ディレクトリ。]。
@@ -541,6 +576,104 @@ public class BlancoDbSetting {
     }
 
     /**
+     * フィールド [useRuntime] の値を設定します。
+     *
+     * フィールドの説明: [ランタイムを使用してインタフェイスやアノテーションを設定します。]。
+     *
+     * @param argUseRuntime フィールド[useRuntime]に設定する値。
+     */
+    public void setUseRuntime(final boolean argUseRuntime) {
+        fUseRuntime = argUseRuntime;
+    }
+
+    /**
+     * フィールド [useRuntime] の値を取得します。
+     *
+     * フィールドの説明: [ランタイムを使用してインタフェイスやアノテーションを設定します。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[useRuntime]から取得した値。
+     */
+    public boolean getUseRuntime() {
+        return fUseRuntime;
+    }
+
+    /**
+     * フィールド [targetStyle] の値を設定します。
+     *
+     * フィールドの説明: [出力先フォルダの書式を指定します。<br>]。
+     * blanco: [targetdir]/main<br>
+     * maven: [targetdir]/main/java<br>
+     * free: [targetdir](targetdirが無指定の場合はblanco/main)
+     *
+     * @param argTargetStyle フィールド[targetStyle]に設定する値。
+     */
+    public void setTargetStyle(final String argTargetStyle) {
+        fTargetStyle = argTargetStyle;
+    }
+
+    /**
+     * フィールド [targetStyle] の値を取得します。
+     *
+     * フィールドの説明: [出力先フォルダの書式を指定します。<br>]。
+     * blanco: [targetdir]/main<br>
+     * maven: [targetdir]/main/java<br>
+     * free: [targetdir](targetdirが無指定の場合はblanco/main)
+     * デフォルト: [&quot;blanco&quot;]。
+     *
+     * @return フィールド[targetStyle]から取得した値。
+     */
+    public String getTargetStyle() {
+        return fTargetStyle;
+    }
+
+    /**
+     * フィールド [lineSeparator] の値を設定します。
+     *
+     * フィールドの説明: [行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。]。
+     *
+     * @param argLineSeparator フィールド[lineSeparator]に設定する値。
+     */
+    public void setLineSeparator(final String argLineSeparator) {
+        fLineSeparator = argLineSeparator;
+    }
+
+    /**
+     * フィールド [lineSeparator] の値を取得します。
+     *
+     * フィールドの説明: [行末記号をしていします。LF=0x0a, CR=0x0d, CFLF=0x0d0x0a とします。LFがデフォルトです。]。
+     * デフォルト: [&quot;LF&quot;]。
+     *
+     * @return フィールド[lineSeparator]から取得した値。
+     */
+    public String getLineSeparator() {
+        return fLineSeparator;
+    }
+
+    /**
+     * フィールド [verbose] の値を設定します。
+     *
+     * フィールドの説明: [自動生成に関してより詳細な情報を出力します。]。
+     *
+     * @param argVerbose フィールド[verbose]に設定する値。
+     */
+    public void setVerbose(final boolean argVerbose) {
+        fVerbose = argVerbose;
+    }
+
+    /**
+     * フィールド [verbose] の値を取得します。
+     *
+     * フィールドの説明: [自動生成に関してより詳細な情報を出力します。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[verbose]から取得した値。
+     */
+    public boolean getVerbose() {
+        return fVerbose;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -573,6 +706,10 @@ public class BlancoDbSetting {
         buf.append(",executeSql=" + fExecuteSql);
         buf.append(",encoding=" + fEncoding);
         buf.append(",convertStringToMsWindows31jUnicode=" + fConvertStringToMsWindows31jUnicode);
+        buf.append(",useRuntime=" + fUseRuntime);
+        buf.append(",targetStyle=" + fTargetStyle);
+        buf.append(",lineSeparator=" + fLineSeparator);
+        buf.append(",verbose=" + fVerbose);
         buf.append("]");
         return buf.toString();
     }
@@ -649,5 +786,17 @@ public class BlancoDbSetting {
         // Name: fConvertStringToMsWindows31jUnicode
         // Type: boolean
         target.fConvertStringToMsWindows31jUnicode = this.fConvertStringToMsWindows31jUnicode;
+        // Name: fUseRuntime
+        // Type: boolean
+        target.fUseRuntime = this.fUseRuntime;
+        // Name: fTargetStyle
+        // Type: java.lang.String
+        target.fTargetStyle = this.fTargetStyle;
+        // Name: fLineSeparator
+        // Type: java.lang.String
+        target.fLineSeparator = this.fLineSeparator;
+        // Name: fVerbose
+        // Type: boolean
+        target.fVerbose = this.fVerbose;
     }
 }

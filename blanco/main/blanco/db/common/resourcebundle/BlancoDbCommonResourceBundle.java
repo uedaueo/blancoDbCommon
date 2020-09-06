@@ -484,4 +484,178 @@ public class BlancoDbCommonResourceBundle {
         messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
         return strbuf.toString();
     }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR010]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義でタグ名が設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR010]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr010(final String arg0) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義でタグ名が設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR010");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR011]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義でタグ名[{1}]においてキー文字列が設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR011]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr011(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義でタグ名[{1}]においてキー文字列が設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR011");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR012]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義でタグ名[{1}]において条件句タイプが設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR012]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr012(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義でタグ名[{1}]において条件句タイプが設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR012");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR013]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において対象itemが設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR013]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr013(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において対象itemが設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR013");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR014]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において比較演算子が設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR014]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr014(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において比較演算子が設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR014");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR015]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において論理演算子が設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR015]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr015(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において論理演算子が設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR015");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR016]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において値の型が設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR016]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr016(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプ[{1}]において値の型が設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR016");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
 }

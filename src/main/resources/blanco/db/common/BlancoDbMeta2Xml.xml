@@ -171,6 +171,47 @@
         </tablecolumn>
       </tableblock>
 
+      <tableblock name="blancodb-dynamicconditions" waitY="1" titleheight="2" rowname="dynamicconditions">
+        <startstring>SQL Definition / Dynamic Conditions Definitions</startstring>
+        <startstring>SQL定義・動的条件式定義</startstring>
+
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="tag">
+          <value>Tag name</value>
+          <value>タグ名</value>
+        </tablecolumn>
+        <tablecolumn name="key">
+          <value>Key string</value>
+          <value>キー文字列</value>
+        </tablecolumn>
+        <tablecolumn name="condition">
+          <value>Condition Type</value>
+          <value>条件句タイプ</value>
+        </tablecolumn>
+        <tablecolumn name="item">
+          <value>Target item</value>
+          <value>対象item</value>
+        </tablecolumn>
+        <tablecolumn name="comparison">
+          <value>Comparison operator</value>
+          <value>比較演算子</value>
+        </tablecolumn>
+        <tablecolumn name="logical">
+          <value>Logical operator</value>
+          <value>論理演算子（先導）</value>
+        </tablecolumn>
+        <tablecolumn name="type">
+          <value>Data Type</value>
+          <value>値の型</value>
+        </tablecolumn>
+        <tablecolumn name="note">
+          <value>Note</value>
+          <value>補足説明</value>
+        </tablecolumn>
+      </tableblock>
+
       <tableblock name="blancodb-outparameters" waitY="1" titleheight="2" rowname="outparameter">
         <startstring>SQL Definition / Output Parameter</startstring>
         <startstring>SQL定義・出力パラメータ</startstring>

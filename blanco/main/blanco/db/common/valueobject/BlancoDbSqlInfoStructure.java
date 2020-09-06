@@ -129,6 +129,14 @@ public class BlancoDbSqlInfoStructure {
     private String fConnectTo = "DEFAULT";
 
     /**
+     * SQL動的条件定義のリスト
+     *
+     * フィールド: [dynamicConditionList]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.db.common.valueobject.BlancoDbDynamicConditionStructure&gt;()]。
+     */
+    private List<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> fDynamicConditionList = new java.util.ArrayList<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure>();
+
+    /**
      * フィールド [name] の値を設定します。
      *
      * フィールドの説明: [SQL定義ID。]。
@@ -491,6 +499,29 @@ public class BlancoDbSqlInfoStructure {
     }
 
     /**
+     * フィールド [dynamicConditionList] の値を設定します。
+     *
+     * フィールドの説明: [SQL動的条件定義のリスト]。
+     *
+     * @param argDynamicConditionList フィールド[dynamicConditionList]に設定する値。
+     */
+    public void setDynamicConditionList(final List<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> argDynamicConditionList) {
+        fDynamicConditionList = argDynamicConditionList;
+    }
+
+    /**
+     * フィールド [dynamicConditionList] の値を取得します。
+     *
+     * フィールドの説明: [SQL動的条件定義のリスト]。
+     * デフォルト: [new java.util.ArrayList&lt;blanco.db.common.valueobject.BlancoDbDynamicConditionStructure&gt;()]。
+     *
+     * @return フィールド[dynamicConditionList]から取得した値。
+     */
+    public List<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> getDynamicConditionList() {
+        return fDynamicConditionList;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -521,6 +552,7 @@ public class BlancoDbSqlInfoStructure {
         buf.append(",statementTimeout=" + fStatementTimeout);
         buf.append(",connectionMethod=" + fConnectionMethod);
         buf.append(",connectTo=" + fConnectTo);
+        buf.append(",dynamicConditionList=" + fDynamicConditionList);
         buf.append("]");
         return buf.toString();
     }
@@ -615,5 +647,16 @@ public class BlancoDbSqlInfoStructure {
         // Name: fConnectTo
         // Type: java.lang.String
         target.fConnectTo = this.fConnectTo;
+        // Name: fDynamicConditionList
+        // Type: java.util.List
+        if (this.fDynamicConditionList != null) {
+            final java.util.Iterator<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> iterator = this.fDynamicConditionList.iterator();
+            for (; iterator.hasNext();) {
+                blanco.db.common.valueobject.BlancoDbDynamicConditionStructure loopSource = iterator.next();
+                blanco.db.common.valueobject.BlancoDbDynamicConditionStructure loopTarget = null;
+                // フィールド[generics]はサポート外の型[blanco.db.common.valueobject.BlancoDbDynamicConditionStructure]です。
+                target.fDynamicConditionList.add(loopTarget);
+            }
+        }
     }
 }
