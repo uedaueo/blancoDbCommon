@@ -454,9 +454,9 @@ public class BlancoDbXmlParser {
              * この動的条件句が対象とする型の情報を、dbColumnの形で作成しておく
              */
             BlancoDbMetaDataColumnStructure columnStructure = new BlancoDbMetaDataColumnStructure();
-            dynamicCondition.setDbCoumn(columnStructure);
+            dynamicCondition.setDbColumn(columnStructure);
             columnStructure.setName(tag);
-            if ("ITEMONLY".equals(type)) {
+            if ("ITEMONLY".equals(condition)) {
                 /* パラメータなし */
                 columnStructure.setTypeName(null);
                 columnStructure.setDataType(Types.OTHER);
@@ -464,7 +464,13 @@ public class BlancoDbXmlParser {
                 columnStructure.setTypeName(dynamicCondition.getType());
                 columnStructure.setDataType(BlancoDbMetaDataUtil
                         .convertJdbcDataType2Int(dynamicCondition.getType()));
+                if (columnStructure.getDataType() == Integer.MIN_VALUE) {
+                    // 新様式のデータ型に合致しない場合には、旧様式として読み込みを行います。
+                    // ここでは、dataTypeおよびnullable について Java型から導出します。
+                    convertOldSqlInputTypeToJdbc(type, columnStructure);
+                }
             }
+            System.out.println("condition = " + condition + ", type = " + type + ", dataType = " + BlancoDbMetaDataUtil.convertJdbcDataTypeToString(columnStructure.getDataType()));
         }
     }
 

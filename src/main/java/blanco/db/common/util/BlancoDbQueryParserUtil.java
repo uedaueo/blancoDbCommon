@@ -29,7 +29,7 @@ public class BlancoDbQueryParserUtil {
      * SQL入力パラメータとして判定するための正規表現文字列。
      */
     private static final String SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER_ONLY = "#[a-zA-Z0-9.\\-_\\P{InBasicLatin}]*\\b|#.*$";
-    private static final String SZ_PARAMETER_FOR_DYNAMIC_CLAUSE_PARAMETER = "\\$\\{[a-zA-Z0-9.\\-_\\P{InBasicLatin}]*\\}\\b|\\$\\{.*\\}$";
+    private static final String SZ_PARAMETER_FOR_DYNAMIC_CLAUSE_PARAMETER = "\\$\\{[a-zA-Z0-9.\\-_\\P{InBasicLatin}]*\\}|\\$\\{.*\\}$";
     private static final String SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER =
             SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER_ONLY + "|" + SZ_PARAMETER_FOR_DYNAMIC_CLAUSE_PARAMETER;
     /**
@@ -56,6 +56,8 @@ public class BlancoDbQueryParserUtil {
         // パラメータを記憶します。
         fOriginalSqlQueryString = this.fSqlInfo.getQuery();
 
+//        System.out.println("blancoDbCommon#BlancoDbQueryParserUtil sql = " + fOriginalSqlQueryString);
+
         // 正規表現文字列インスタンスを生成します。
         // TODO 正規表現による処理において不適切な状況が発生する可能性があります。
         final Matcher matcher = Pattern.compile(
@@ -65,6 +67,7 @@ public class BlancoDbQueryParserUtil {
         for (int index = 1; matcher.find(); index++) {
             int numPlace = 1;
             String name = matcher.group();
+//            System.out.println("blancoDbCommon: BlancoDbQueryParserUtil : " + name);
             if (name.startsWith("#")) {
                 // InParameter の場合は先頭の＃を除去します。
                 name = name.substring(1);
@@ -146,6 +149,7 @@ public class BlancoDbQueryParserUtil {
             String tag = this.stripTagName(name);
             naturalSql = this.createDynamicClauseNatural(dynamicConditionList, tag, naturalSql);
         }
+        System.out.println("blancoDbCommon: getNaturalSqlStringForJava" + naturalSql);
         return naturalSql;
     }
 
@@ -167,14 +171,14 @@ public class BlancoDbQueryParserUtil {
                 StringBuffer sb = new StringBuffer();
                 String condition = conditionStructure.getCondition();
                 if ("ITEMONLY".equals(condition)) {
-                    sb.append(" ? ");
+                    sb.append(" " + conditionStructure.getItem() + " ");
                 } else if ("BETWEEN".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " BETWEEN ? AND ? )");
                 } else if ("IN".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " IN ( ? ) ");
                     sb.append(" )");
                 } else if ("COMPARE".equals(condition)) {
-                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " " + conditionStructure.getComparison() + " ? )");
+                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " " + this.convertComparisonTermToSQL(conditionStructure.getComparison()) + " ? )");
                 }
                 query = argQuery.replace("${" + argTag + "}", sb.toString());
                 break;
@@ -242,7 +246,7 @@ public class BlancoDbQueryParserUtil {
          * DynamicClause 分
          */
         for (BlancoDbDynamicConditionStructure dynamicClause : sqlInfo.getDynamicConditionList()) {
-            final BlancoDbMetaDataColumnStructure columnStructure = dynamicClause.getDbCoumn();
+            final BlancoDbMetaDataColumnStructure columnStructure = dynamicClause.getDbColumn();
 
             final int[] listNativeCol = this.getSqlParameters(columnStructure.getName());
             if (listNativeCol == null) {
@@ -290,12 +294,38 @@ public class BlancoDbQueryParserUtil {
         return found;
     }
 
+    /**
+     * 静的入力パラメータ分のみを ? に置き換えて自然なSQLを作成します。
+     * @param escapedQuery
+     * @return
+     */
     public String getNaturalSqlStringOnlyStatic(String escapedQuery) {
         /*
          * InParameter 分
          */
-        String naturalSql = fOriginalSqlQueryString.replaceAll(
+        String naturalSql = escapedQuery.replaceAll(
                 SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER_ONLY, "?");
         return naturalSql;
+    }
+
+    final private Map<String, String> mapComparison = new HashMap<String, String>() {
+        {
+            put("EQ", "=");
+            put("GT", "=");
+            put("LT", "=");
+            put("GE", "=");
+            put("LE", "=");
+            put("LIKE", "=");
+            put("NOT LIKE", "=");
+        }
+    };
+
+    /**
+     * 定義書上の比較演算子記号をSQLで使用可能なタイプに変換します。
+     * @param term
+     * @return
+     */
+    public String convertComparisonTermToSQL(String term) {
+        return this.mapComparison.get(term);
     }
 }
