@@ -171,8 +171,8 @@ public class BlancoDbQueryParserUtil {
             if (conditionStructure.getTag().equals(argTag)) {
                 StringBuffer sb = new StringBuffer();
                 String condition = conditionStructure.getCondition();
-                if ("ITEMONLY".equals(condition)) {
-                    sb.append(" " + conditionStructure.getItem() + " ");
+                if ("ORDERBY".equals(condition)) {
+                    sb.append(" ORDER BY " + conditionStructure.getItem() + " ");
                 } else if ("BETWEEN".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " BETWEEN ? AND ? )");
                 } else if ("NOT BETWEEN".equals(condition)) {

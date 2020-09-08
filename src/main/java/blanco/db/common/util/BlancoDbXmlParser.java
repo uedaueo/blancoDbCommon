@@ -432,7 +432,7 @@ public class BlancoDbXmlParser {
                     BlancoXmlUtil.getTextContent(
                             (Element) nodeLook, "logical")
             );
-            if (!"ITEMONLY".equals(condition) && logical.length() == 0) {
+            if (!"ORDERBY".equals(condition) && logical.length() == 0) {
                 throw new IllegalArgumentException(fBundle
                         .getXml2javaclassErr015(sqlInfo.getName(), condition));
             }
@@ -442,7 +442,7 @@ public class BlancoDbXmlParser {
                     BlancoXmlUtil.getTextContent(
                             (Element) nodeLook, "type")
             );
-            if (!"ITEMONLY".equals(condition) && type.length() == 0) {
+            if (!"ORDERBY".equals(condition) && type.length() == 0) {
                 throw new IllegalArgumentException(fBundle
                         .getXml2javaclassErr016(sqlInfo.getName(), condition));
             }
@@ -456,7 +456,7 @@ public class BlancoDbXmlParser {
             BlancoDbMetaDataColumnStructure columnStructure = new BlancoDbMetaDataColumnStructure();
             dynamicCondition.setDbColumn(columnStructure);
             columnStructure.setName(tag);
-            if ("ITEMONLY".equals(condition)) {
+            if ("ORDERBY".equals(condition)) {
                 /* パラメータなし */
                 columnStructure.setTypeName(null);
                 columnStructure.setDataType(Types.OTHER);
