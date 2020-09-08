@@ -116,6 +116,9 @@ public class BlancoDbXml2SqlInfo {
                     sqlInfo.getName(), e.getSQLState(),
                     BlancoBigDecimalUtil.toBigDecimal(e.getErrorCode()),
                     e.toString()));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(fBundle.getXml2javaclassErr017(
+                    sqlInfo.getName(), e.getMessage()));
         }
     }
 }

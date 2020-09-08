@@ -13,6 +13,7 @@ import blanco.db.common.valueobject.BlancoDbDynamicConditionStructure;
 import blanco.db.common.valueobject.BlancoDbSqlInfoStructure;
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -132,7 +133,7 @@ public class BlancoDbQueryParserUtil {
      *
      * @return
      */
-    public String getNaturalSqlStringForJava(List<BlancoDbDynamicConditionStructure> dynamicConditionList) {
+    public String getNaturalSqlStringForJava(List<BlancoDbDynamicConditionStructure> dynamicConditionList) throws IllegalArgumentException {
         /*
          * InParameter 分
          */
@@ -164,7 +165,7 @@ public class BlancoDbQueryParserUtil {
             final List<BlancoDbDynamicConditionStructure> argDynamicConditionList,
             final String argTag,
             final String argQuery
-    ) {
+    ) throws IllegalArgumentException {
         String query = argQuery;
         for (BlancoDbDynamicConditionStructure conditionStructure : argDynamicConditionList) {
             if (conditionStructure.getTag().equals(argTag)) {
@@ -174,11 +175,18 @@ public class BlancoDbQueryParserUtil {
                     sb.append(" " + conditionStructure.getItem() + " ");
                 } else if ("BETWEEN".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " BETWEEN ? AND ? )");
+                } else if ("NOT BETWEEN".equals(condition)) {
+                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " NOT BETWEEN ? AND ? )");
                 } else if ("IN".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " IN ( ? ) ");
                     sb.append(" )");
+                } else if ("NOT IN".equals(condition)) {
+                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " NOT IN ( ? ) ");
+                    sb.append(" )");
                 } else if ("COMPARE".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " " + this.convertComparisonTermToSQL(conditionStructure.getComparison()) + " ? )");
+                } else {
+                    throw new IllegalArgumentException("[ " + condition + " ]");
                 }
                 query = argQuery.replace("${" + argTag + "}", sb.toString());
                 break;
