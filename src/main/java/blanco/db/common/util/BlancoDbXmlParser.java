@@ -432,10 +432,15 @@ public class BlancoDbXmlParser {
                     BlancoXmlUtil.getTextContent(
                             (Element) nodeLook, "logical")
             );
-            if (!"ORDERBY".equals(condition) && logical.length() == 0) {
-                throw new IllegalArgumentException(fBundle
-                        .getXml2javaclassErr015(sqlInfo.getName(), condition));
-            }
+            /*
+             * WHERE の直後にも DynamicClause を置けるようにチェックを外します。
+             * 途中の定義で論理演算子を指定し忘れた場合、更新系ではruntimeまで
+             * エラーのチェックができません。
+             */
+//            if (!"ORDERBY".equals(condition) && logical.length() == 0) {
+//                throw new IllegalArgumentException(fBundle
+//                        .getXml2javaclassErr015(sqlInfo.getName(), condition));
+//            }
             dynamicCondition.setLogical(logical);
 
             String type = BlancoStringUtil.null2Blank(

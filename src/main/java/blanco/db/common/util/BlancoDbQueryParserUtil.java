@@ -195,12 +195,21 @@ public class BlancoDbQueryParserUtil {
         return query;
     }
 
+    /**
+     * 必要な ? の最小値を取得する。
+     * BEWTEEN, NOT BETWEEN の場合は 2。
+     * @param argTag
+     * @return
+     */
     private int getMinimumPlaceholders(
             final String argTag
     ) {
         int numPlace = 1;
         BlancoDbDynamicConditionStructure found = this.getConditionStructureByTag(argTag);
-        if (found != null && "BETWEEN".equals(found.getCondition())) {
+        if (found != null &&
+                ("BETWEEN".equals(found.getCondition()) ||
+                        ("NOT BETWEEN".equals(found.getCondition())))
+        ) {
             numPlace = 2;
         }
         return numPlace;
@@ -286,13 +295,6 @@ public class BlancoDbQueryParserUtil {
                         + indexNativeCol + ")番目の入力パラメータが取得できません。");
             }
             nativeParam.add(objLook);
-            /*
-             * BETWEEN dynamic clause の場合は 2 つ入れる必要がある
-             */
-            BlancoDbDynamicConditionStructure dynamicCondition = parserUtil.getConditionStructureByTag(objLook.getName());
-            if (dynamicCondition != null && ("BETWEEN".equals(dynamicCondition.getCondition()) || "NOT BETWEEN".equals(dynamicCondition.getCondition()))) {
-                nativeParam.add(objLook);
-            }
         }
 
         return nativeParam;
