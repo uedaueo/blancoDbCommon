@@ -251,6 +251,11 @@ public class BlancoDbQueryParserUtil {
         }
 
         /*
+         * parserUtil を作成しておく
+         */
+        BlancoDbQueryParserUtil parserUtil = new BlancoDbQueryParserUtil(fSqlInfo);
+
+        /*
          * DynamicClause 分
          */
         for (BlancoDbDynamicConditionStructure dynamicClause : sqlInfo.getDynamicConditionList()) {
@@ -281,6 +286,13 @@ public class BlancoDbQueryParserUtil {
                         + indexNativeCol + ")番目の入力パラメータが取得できません。");
             }
             nativeParam.add(objLook);
+            /*
+             * BETWEEN dynamic clause の場合は 2 つ入れる必要がある
+             */
+            BlancoDbDynamicConditionStructure dynamicCondition = parserUtil.getConditionStructureByTag(objLook.getName());
+            if (dynamicCondition != null && ("BETWEEN".equals(dynamicCondition.getCondition()) || "NOT BETWEEN".equals(dynamicCondition.getCondition()))) {
+                nativeParam.add(objLook);
+            }
         }
 
         return nativeParam;
