@@ -2,6 +2,8 @@ package blanco.db.common.valueobject;
 
 import java.util.List;
 
+import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
+
 /**
  * SQL情報に関する構造。SQL定義書を抽象的にあらわしたものにも相当します。オリジナル作者 Yasuo Nakanishi
  */
@@ -47,7 +49,7 @@ public class BlancoDbSqlInfoStructure {
      * フィールド: [inParameterList]。
      * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      */
-    private List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> fInParameterList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
+    private List<BlancoDbMetaDataColumnStructure> fInParameterList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
 
     /**
      * (caller)呼出型SQLのSQL出力パラメータのリスト。Callerの場合にのみ利用されます。
@@ -55,7 +57,7 @@ public class BlancoDbSqlInfoStructure {
      * フィールド: [outParameterList]。
      * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      */
-    private List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> fOutParameterList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
+    private List<BlancoDbMetaDataColumnStructure> fOutParameterList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
 
     /**
      * (iterator)検索型SQLの検索結果の列リスト。Iteratorの場合にのみ利用されます。
@@ -63,7 +65,7 @@ public class BlancoDbSqlInfoStructure {
      * フィールド: [resultSetColumnList]。
      * デフォルト: [new java.util.ArrayList&lt;blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure&gt;()]。
      */
-    private List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> fResultSetColumnList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
+    private List<BlancoDbMetaDataColumnStructure> fResultSetColumnList = new java.util.ArrayList<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure>();
 
     /**
      * 一行制約があるかどうか。xmlのsingleに相当。
@@ -134,7 +136,7 @@ public class BlancoDbSqlInfoStructure {
      * フィールド: [dynamicConditionList]。
      * デフォルト: [new java.util.ArrayList&lt;blanco.db.common.valueobject.BlancoDbDynamicConditionStructure&gt;()]。
      */
-    private List<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> fDynamicConditionList = new java.util.ArrayList<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure>();
+    private List<BlancoDbDynamicConditionStructure> fDynamicConditionList = new java.util.ArrayList<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure>();
 
     /**
      * フィールド [name] の値を設定します。
@@ -253,7 +255,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @param argInParameterList フィールド[inParameterList]に設定する値。
      */
-    public void setInParameterList(final List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> argInParameterList) {
+    public void setInParameterList(final List<BlancoDbMetaDataColumnStructure> argInParameterList) {
         fInParameterList = argInParameterList;
     }
 
@@ -265,7 +267,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @return フィールド[inParameterList]から取得した値。
      */
-    public List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> getInParameterList() {
+    public List<BlancoDbMetaDataColumnStructure> getInParameterList() {
         return fInParameterList;
     }
 
@@ -276,7 +278,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @param argOutParameterList フィールド[outParameterList]に設定する値。
      */
-    public void setOutParameterList(final List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> argOutParameterList) {
+    public void setOutParameterList(final List<BlancoDbMetaDataColumnStructure> argOutParameterList) {
         fOutParameterList = argOutParameterList;
     }
 
@@ -288,7 +290,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @return フィールド[outParameterList]から取得した値。
      */
-    public List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> getOutParameterList() {
+    public List<BlancoDbMetaDataColumnStructure> getOutParameterList() {
         return fOutParameterList;
     }
 
@@ -299,7 +301,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @param argResultSetColumnList フィールド[resultSetColumnList]に設定する値。
      */
-    public void setResultSetColumnList(final List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> argResultSetColumnList) {
+    public void setResultSetColumnList(final List<BlancoDbMetaDataColumnStructure> argResultSetColumnList) {
         fResultSetColumnList = argResultSetColumnList;
     }
 
@@ -311,7 +313,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @return フィールド[resultSetColumnList]から取得した値。
      */
-    public List<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> getResultSetColumnList() {
+    public List<BlancoDbMetaDataColumnStructure> getResultSetColumnList() {
         return fResultSetColumnList;
     }
 
@@ -505,7 +507,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @param argDynamicConditionList フィールド[dynamicConditionList]に設定する値。
      */
-    public void setDynamicConditionList(final List<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> argDynamicConditionList) {
+    public void setDynamicConditionList(final List<BlancoDbDynamicConditionStructure> argDynamicConditionList) {
         fDynamicConditionList = argDynamicConditionList;
     }
 
@@ -517,7 +519,7 @@ public class BlancoDbSqlInfoStructure {
      *
      * @return フィールド[dynamicConditionList]から取得した値。
      */
-    public List<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> getDynamicConditionList() {
+    public List<BlancoDbDynamicConditionStructure> getDynamicConditionList() {
         return fDynamicConditionList;
     }
 
@@ -592,37 +594,13 @@ public class BlancoDbSqlInfoStructure {
         target.fQuery = this.fQuery;
         // Name: fInParameterList
         // Type: java.util.List
-        if (this.fInParameterList != null) {
-            final java.util.Iterator<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> iterator = this.fInParameterList.iterator();
-            for (; iterator.hasNext();) {
-                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopSource = iterator.next();
-                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopTarget = null;
-                // フィールド[generics]はサポート外の型[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
-                target.fInParameterList.add(loopTarget);
-            }
-        }
+        // フィールド[fInParameterList]はサポート外の型[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
         // Name: fOutParameterList
         // Type: java.util.List
-        if (this.fOutParameterList != null) {
-            final java.util.Iterator<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> iterator = this.fOutParameterList.iterator();
-            for (; iterator.hasNext();) {
-                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopSource = iterator.next();
-                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopTarget = null;
-                // フィールド[generics]はサポート外の型[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
-                target.fOutParameterList.add(loopTarget);
-            }
-        }
+        // フィールド[fOutParameterList]はサポート外の型[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
         // Name: fResultSetColumnList
         // Type: java.util.List
-        if (this.fResultSetColumnList != null) {
-            final java.util.Iterator<blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure> iterator = this.fResultSetColumnList.iterator();
-            for (; iterator.hasNext();) {
-                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopSource = iterator.next();
-                blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure loopTarget = null;
-                // フィールド[generics]はサポート外の型[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
-                target.fResultSetColumnList.add(loopTarget);
-            }
-        }
+        // フィールド[fResultSetColumnList]はサポート外の型[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
         // Name: fSingle
         // Type: boolean
         target.fSingle = this.fSingle;
@@ -649,14 +627,6 @@ public class BlancoDbSqlInfoStructure {
         target.fConnectTo = this.fConnectTo;
         // Name: fDynamicConditionList
         // Type: java.util.List
-        if (this.fDynamicConditionList != null) {
-            final java.util.Iterator<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure> iterator = this.fDynamicConditionList.iterator();
-            for (; iterator.hasNext();) {
-                blanco.db.common.valueobject.BlancoDbDynamicConditionStructure loopSource = iterator.next();
-                blanco.db.common.valueobject.BlancoDbDynamicConditionStructure loopTarget = null;
-                // フィールド[generics]はサポート外の型[blanco.db.common.valueobject.BlancoDbDynamicConditionStructure]です。
-                target.fDynamicConditionList.add(loopTarget);
-            }
-        }
+        // フィールド[fDynamicConditionList]はサポート外の型[java.util.Listblanco.db.common.valueobject.BlancoDbDynamicConditionStructure]です。
     }
 }

@@ -150,7 +150,7 @@ public class BlancoDbQueryParserUtil {
             String tag = this.stripTagName(name);
             naturalSql = this.createDynamicClauseNatural(dynamicConditionList, tag, naturalSql);
         }
-        System.out.println("blancoDbCommon: getNaturalSqlStringForJava" + naturalSql);
+        System.out.println("blancoDbCommon: getNaturalSqlStringForJava : " + naturalSql);
         return naturalSql;
     }
 
@@ -171,7 +171,9 @@ public class BlancoDbQueryParserUtil {
             if (conditionStructure.getTag().equals(argTag)) {
                 StringBuffer sb = new StringBuffer();
                 String condition = conditionStructure.getCondition();
-                if ("ORDERBY".equals(condition)) {
+                if ("LITERAL".equals(condition)) {
+                    sb.append(" " + conditionStructure.getItem() + " ");
+                } else if ("ORDERBY".equals(condition)) {
                     sb.append(" ORDER BY " + conditionStructure.getItem() + " ");
                 } else if ("BETWEEN".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " BETWEEN ? AND ? )");
