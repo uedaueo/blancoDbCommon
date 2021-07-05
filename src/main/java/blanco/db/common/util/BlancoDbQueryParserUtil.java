@@ -9,11 +9,12 @@
  */
 package blanco.db.common.util;
 
+import blanco.db.common.resourcebundle.BlancoDbCommonResourceBundle;
+import blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure;
 import blanco.db.common.valueobject.BlancoDbDynamicConditionStructure;
 import blanco.db.common.valueobject.BlancoDbSqlInfoStructure;
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
 
-import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,8 +38,7 @@ public class BlancoDbQueryParserUtil {
      * SQL入力パラメータのマップ <br>
      * TODO マップを利用していますが、これだと順序性が確保されません。
      */
-    @SuppressWarnings("unchecked")
-    private final Map fMapForSqlInputParameters = new Hashtable();
+    private final Map<String, List<Integer>> fMapForSqlInputParameters = new Hashtable<>();
 
     /**
      * オリジナルのSQL文字列
@@ -49,6 +49,11 @@ public class BlancoDbQueryParserUtil {
      * このメソッドが処理対象としているSQL情報の構造体。
      */
     protected BlancoDbSqlInfoStructure fSqlInfo = null;
+
+    /**
+     * blancoDbリソースバンドル情報へのアクセサ。
+     */
+    private final BlancoDbCommonResourceBundle fBundle = new BlancoDbCommonResourceBundle();
 
     @SuppressWarnings("unchecked")
     public BlancoDbQueryParserUtil(final BlancoDbSqlInfoStructure argSqlInfo) {
@@ -77,23 +82,22 @@ public class BlancoDbQueryParserUtil {
                 name = this.stripTagName(name);
                 numPlace = this.getMinimumPlaceholders(name);
             }
-            if (fMapForSqlInputParameters.containsKey(name) == false) {
-                fMapForSqlInputParameters.put(name, new ArrayList());
+            if (!fMapForSqlInputParameters.containsKey(name)) {
+                fMapForSqlInputParameters.put(name, new ArrayList<>());
             }
             for (int n = 0; n < numPlace; n++) {
                 if (n > 0) {
                     index++;
                 }
-                ((List) fMapForSqlInputParameters.get(name))
-                        .add(new Integer(index));
+                fMapForSqlInputParameters.get(name).add(index);
             }
         }
 
-        for (Iterator ite = fMapForSqlInputParameters.keySet().iterator(); ite
+        for (Iterator<String> ite = fMapForSqlInputParameters.keySet().iterator(); ite
                 .hasNext();) {
-            final String key = (String) ite.next();
-            final List list = (List) fMapForSqlInputParameters.get(key);
-            fMapForSqlInputParameters.put(key, convertListToArray(list));
+            final String key = ite.next();
+            final List<Integer> list = fMapForSqlInputParameters.get(key);
+            fMapForSqlInputParameters.put(key, list);
         }
     }
 
@@ -120,9 +124,9 @@ public class BlancoDbQueryParserUtil {
      * @param key
      * @return
      */
-    public int[] getSqlParameters(final String key) {
+    public List<Integer> getSqlParameters(final String key) {
         // マップからIteratorを作成している点に注意。
-        return (int[]) fMapForSqlInputParameters.get(key);
+        return fMapForSqlInputParameters.get(key);
     }
 
     /**
@@ -173,6 +177,11 @@ public class BlancoDbQueryParserUtil {
                 String condition = conditionStructure.getCondition();
                 if ("LITERAL".equals(condition)) {
                     sb.append(" " + conditionStructure.getItem() + " ");
+                } else if ("FUNCTION".equals(condition)) {
+                    BlancoDbDynamicConditionFunctionStructure function = conditionStructure.getFunction();
+                    if (function.getDoTest()) {
+                        sb.append(" " + function.getFunction() + " ");
+                    }
                 } else if ("ORDERBY".equals(condition)) {
                     sb.append(" ORDER BY " + conditionStructure.getItem() + " ");
                 } else if ("BETWEEN".equals(condition)) {
@@ -208,11 +217,15 @@ public class BlancoDbQueryParserUtil {
     ) {
         int numPlace = 1;
         BlancoDbDynamicConditionStructure found = this.getConditionStructureByTag(argTag);
-        if (found != null &&
-                ("BETWEEN".equals(found.getCondition()) ||
-                        ("NOT BETWEEN".equals(found.getCondition())))
-        ) {
-            numPlace = 2;
+        if (found != null) {
+            if ("BETWEEN".equals(found.getCondition()) ||
+                    ("NOT BETWEEN".equals(found.getCondition()))) {
+                numPlace = 2;
+            } else if ("FUNCTION".equals(found.getCondition())) {
+                if (found.getFunction().getDoTest()) {
+                    numPlace = found.getFunction().getParamNum();
+                }
+            }
         }
         return numPlace;
     }
@@ -246,48 +259,66 @@ public class BlancoDbQueryParserUtil {
         for (int indexCol = 0; indexCol < sqlInfo.getInParameterList().size(); indexCol++) {
             final BlancoDbMetaDataColumnStructure columnStructure = sqlInfo
                     .getInParameterList().get(indexCol);
-            final int[] listNativeCol = this.getSqlParameters(columnStructure.getName());
+            final List<Integer> listNativeCol = this.getSqlParameters(columnStructure.getName());
             if (listNativeCol == null) {
                 throw new IllegalArgumentException("SQL定義ID["
                         + sqlInfo.getName() + "]の SQL入力パラメータ["
                         + columnStructure.getName() + "]が結びついていません.");
             }
 
-            for (int indexSearch = 0; indexSearch < listNativeCol.length; indexSearch++) {
-                maxNativeCol = Math.max(listNativeCol[indexSearch],
+            for (int indexSearch = 0; indexSearch < listNativeCol.size(); indexSearch++) {
+                maxNativeCol = Math.max(listNativeCol.get(indexSearch),
                         maxNativeCol);
-                hashCol.put(String.valueOf(listNativeCol[indexSearch]),
+                hashCol.put(String.valueOf(listNativeCol.get(indexSearch)),
                         columnStructure);
             }
         }
 
-        /*
-         * parserUtil を作成しておく
-         */
-        BlancoDbQueryParserUtil parserUtil = new BlancoDbQueryParserUtil(fSqlInfo);
-
+//        /*
+//         * parserUtil を作成しておく
+//         */
+//        BlancoDbQueryParserUtil parserUtil = new BlancoDbQueryParserUtil(fSqlInfo);
+//
         /*
          * DynamicClause 分
          */
         for (BlancoDbDynamicConditionStructure dynamicClause : sqlInfo.getDynamicConditionList()) {
             final BlancoDbMetaDataColumnStructure columnStructure = dynamicClause.getDbColumn();
-
-            final int[] listNativeCol = this.getSqlParameters(columnStructure.getName());
+            final List<Integer> listNativeCol = this.getSqlParameters(columnStructure.getName());
             if (listNativeCol == null) {
                 throw new IllegalArgumentException("SQL定義ID["
                         + sqlInfo.getName() + "]の SQL入力パラメータ["
                         + columnStructure.getName() + "]が結びついていません.");
             }
 
-            for (int indexSearch = 0; indexSearch < listNativeCol.length; indexSearch++) {
-                maxNativeCol = Math.max(listNativeCol[indexSearch],
-                        maxNativeCol);
-                hashCol.put(String.valueOf(listNativeCol[indexSearch]),
-                        columnStructure);
+            if ("FUNCTION".equals(dynamicClause.getCondition())) {
+                final BlancoDbDynamicConditionFunctionStructure dynamicFunction = dynamicClause.getFunction();
+                if (!dynamicFunction.getDoTest()) {
+                    System.out.println(fBundle.getXml2javaclassInfo001(sqlInfo.getName(), dynamicFunction.getTag()));
+                    maxNativeCol = Math.max(listNativeCol.get(0),
+                            maxNativeCol);
+                    hashCol.put(String.valueOf(listNativeCol.get(0)),
+                            columnStructure);
+                    continue;
+                }
+                for (int indexSearch = 0; indexSearch < listNativeCol.size(); indexSearch++) {
+                    final BlancoDbMetaDataColumnStructure functionColumnStructure = dynamicFunction.getDbColumnList().get(indexSearch);
+                    maxNativeCol = Math.max(listNativeCol.get(indexSearch),
+                            maxNativeCol);
+                    hashCol.put(String.valueOf(listNativeCol.get(indexSearch)),
+                            functionColumnStructure);
+                }
+            } else {
+                for (int indexSearch = 0; indexSearch < listNativeCol.size(); indexSearch++) {
+                    maxNativeCol = Math.max(listNativeCol.get(indexSearch),
+                            maxNativeCol);
+                    hashCol.put(String.valueOf(listNativeCol.get(indexSearch)),
+                            columnStructure);
+                }
             }
         }
 
-        final List<BlancoDbMetaDataColumnStructure> nativeParam = new ArrayList<BlancoDbMetaDataColumnStructure>();
+        final List<BlancoDbMetaDataColumnStructure> nativeParam = new ArrayList<>();
         for (int indexNativeCol = 1; indexNativeCol <= maxNativeCol; indexNativeCol++) {
             final BlancoDbMetaDataColumnStructure objLook = hashCol.get(String
                     .valueOf(indexNativeCol));

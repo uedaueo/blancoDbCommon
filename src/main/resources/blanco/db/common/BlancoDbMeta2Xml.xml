@@ -212,6 +212,82 @@
         </tablecolumn>
       </tableblock>
 
+      <tableblock name="blancodb-dynamicfunctions" waitY="1" titleheight="2" rowname="dynamicfunctions">
+        <startstring>SQL Definition / Functions for Dynamic Condition</startstring>
+        <startstring>SQL定義・動的条件式関数定義</startstring>
+
+        <tablecolumn name="no">
+          <value>No.</value>
+        </tablecolumn>
+        <tablecolumn name="tag">
+          <value>Function Tag name</value>
+          <value>関数タグ名</value>
+        </tablecolumn>
+        <tablecolumn name="function">
+          <value>Function</value>
+          <value>関数名</value>
+        </tablecolumn>
+        <tablecolumn name="paramNum">
+          <value>parameter number</value>
+          <value>パラメータ数</value>
+        </tablecolumn>
+        <tablecolumn name="doTest">
+          <value>Test on generation</value>
+          <value>自動生成時にチェック</value>
+        </tablecolumn>
+        <tablecolumn name="paramType01">
+          <value>type parameter01</value>
+          <value>パラメータ1の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType02">
+          <value>type parameter02</value>
+          <value>パラメータ2の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType03">
+          <value>type parameter03</value>
+          <value>パラメータ3の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType04">
+          <value>type parameter04</value>
+          <value>パラメータ4の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType05">
+          <value>type parameter05</value>
+          <value>パラメータ5の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType06">
+          <value>type parameter06</value>
+          <value>パラメータ6の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType07">
+          <value>type parameter07</value>
+          <value>パラメータ7の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType08">
+          <value>type parameter08</value>
+          <value>パラメータ8の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType09">
+          <value>type parameter09</value>
+          <value>パラメータ9の型</value>
+        </tablecolumn>
+        <tablecolumn name="paramType10">
+          <value>type parameter10</value>
+          <value>パラメータ10の型</value>
+        </tablecolumn>
+
+        <valuemapping>
+          <result>true</result>
+          <source>yes</source>
+          <source>する</source>
+        </valuemapping>
+        <valuemapping>
+          <result>false</result>
+          <source>no</source>
+          <source>しない</source>
+        </valuemapping>
+      </tableblock>
+
       <tableblock name="blancodb-outparameters" waitY="1" titleheight="2" rowname="outparameter">
         <startstring>SQL Definition / Output Parameter</startstring>
         <startstring>SQL定義・出力パラメータ</startstring>

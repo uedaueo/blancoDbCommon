@@ -683,4 +683,179 @@ public class BlancoDbCommonResourceBundle {
         messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
         return strbuf.toString();
     }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR018]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名が未定義です。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR018]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr018(final String arg0) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名が未定義です。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR018");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR019]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]において関数名が設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR019]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr019(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]において関数名が設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR019");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR020]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]においてパラメータ数が設定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR020]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr020(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]においてパラメータ数が設定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR020");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR021]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]において不正なパラメータ数が指定されました。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR021]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr021(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]において不正なパラメータ数が指定されました。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR021");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR022]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]においてパラメータ [{2}]の型が指定されていません。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @param arg2 置換文字列{2}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR022]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr022(final String arg0, final String arg1, final String arg2) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式関数定義で関数タグ名[{1}]においてパラメータ [{2}]の型が指定されていません。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR022");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1, arg2}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR023]
+     *
+     * [SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプFUNCTIONにおいて関数タグ[{1}]は未定義です。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR023]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr023(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]のSQL動的条件式定義で条件句タイプFUNCTIONにおいて関数タグ[{1}]は未定義です。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR023");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.INFO001]
+     *
+     * [SQL定義ID[{0}]の動的関数定義[{1}]では試験実行のスキップが指定されています。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @param arg1 置換文字列{1}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.INFO001]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassInfo001(final String arg0, final String arg1) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]の動的関数定義[{1}]では試験実行のスキップが指定されています。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.INFO001");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0, arg1}, strbuf, null);
+        return strbuf.toString();
+    }
 }

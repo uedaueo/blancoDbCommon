@@ -1,6 +1,7 @@
 package blanco.db.common.valueobject;
 
 import java.util.List;
+import java.util.Map;
 
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
 
@@ -131,12 +132,20 @@ public class BlancoDbSqlInfoStructure {
     private String fConnectTo = "DEFAULT";
 
     /**
-     * SQL動的条件定義のリスト
+     * SQL動的条件式定義のリスト
      *
      * フィールド: [dynamicConditionList]。
      * デフォルト: [new java.util.ArrayList&lt;blanco.db.common.valueobject.BlancoDbDynamicConditionStructure&gt;()]。
      */
     private List<BlancoDbDynamicConditionStructure> fDynamicConditionList = new java.util.ArrayList<blanco.db.common.valueobject.BlancoDbDynamicConditionStructure>();
+
+    /**
+     * SQL動的条件式関数定義のマップ
+     *
+     * フィールド: [dynamicConditionFunctionMap]。
+     * デフォルト: [new java.util.HashMap&lt;java.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure&gt;()]。
+     */
+    private Map<String, BlancoDbDynamicConditionFunctionStructure> fDynamicConditionFunctionMap = new java.util.HashMap<java.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure>();
 
     /**
      * フィールド [name] の値を設定します。
@@ -503,7 +512,7 @@ public class BlancoDbSqlInfoStructure {
     /**
      * フィールド [dynamicConditionList] の値を設定します。
      *
-     * フィールドの説明: [SQL動的条件定義のリスト]。
+     * フィールドの説明: [SQL動的条件式定義のリスト]。
      *
      * @param argDynamicConditionList フィールド[dynamicConditionList]に設定する値。
      */
@@ -514,13 +523,36 @@ public class BlancoDbSqlInfoStructure {
     /**
      * フィールド [dynamicConditionList] の値を取得します。
      *
-     * フィールドの説明: [SQL動的条件定義のリスト]。
+     * フィールドの説明: [SQL動的条件式定義のリスト]。
      * デフォルト: [new java.util.ArrayList&lt;blanco.db.common.valueobject.BlancoDbDynamicConditionStructure&gt;()]。
      *
      * @return フィールド[dynamicConditionList]から取得した値。
      */
     public List<BlancoDbDynamicConditionStructure> getDynamicConditionList() {
         return fDynamicConditionList;
+    }
+
+    /**
+     * フィールド [dynamicConditionFunctionMap] の値を設定します。
+     *
+     * フィールドの説明: [SQL動的条件式関数定義のマップ]。
+     *
+     * @param argDynamicConditionFunctionMap フィールド[dynamicConditionFunctionMap]に設定する値。
+     */
+    public void setDynamicConditionFunctionMap(final Map<String, BlancoDbDynamicConditionFunctionStructure> argDynamicConditionFunctionMap) {
+        fDynamicConditionFunctionMap = argDynamicConditionFunctionMap;
+    }
+
+    /**
+     * フィールド [dynamicConditionFunctionMap] の値を取得します。
+     *
+     * フィールドの説明: [SQL動的条件式関数定義のマップ]。
+     * デフォルト: [new java.util.HashMap&lt;java.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure&gt;()]。
+     *
+     * @return フィールド[dynamicConditionFunctionMap]から取得した値。
+     */
+    public Map<String, BlancoDbDynamicConditionFunctionStructure> getDynamicConditionFunctionMap() {
+        return fDynamicConditionFunctionMap;
     }
 
     /**
@@ -555,6 +587,7 @@ public class BlancoDbSqlInfoStructure {
         buf.append(",connectionMethod=" + fConnectionMethod);
         buf.append(",connectTo=" + fConnectTo);
         buf.append(",dynamicConditionList=" + fDynamicConditionList);
+        buf.append(",dynamicConditionFunctionMap=" + fDynamicConditionFunctionMap);
         buf.append("]");
         return buf.toString();
     }
@@ -628,5 +661,8 @@ public class BlancoDbSqlInfoStructure {
         // Name: fDynamicConditionList
         // Type: java.util.List
         // フィールド[fDynamicConditionList]はサポート外の型[java.util.Listblanco.db.common.valueobject.BlancoDbDynamicConditionStructure]です。
+        // Name: fDynamicConditionFunctionMap
+        // Type: java.util.Map
+        // フィールド[fDynamicConditionFunctionMap]はサポート外の型[java.util.Mapjava.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure]です。
     }
 }

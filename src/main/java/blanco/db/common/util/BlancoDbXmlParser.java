@@ -9,35 +9,33 @@
  */
 package blanco.db.common.util;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.dom.DOMResult;
-
-import blanco.db.common.valueobject.BlancoDbDynamicConditionStructure;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
+import blanco.commons.util.BlancoNameAdjuster;
 import blanco.commons.util.BlancoStringUtil;
 import blanco.commons.util.BlancoXmlUtil;
 import blanco.db.common.resourcebundle.BlancoDbCommonResourceBundle;
 import blanco.db.common.stringgroup.BlancoDbSqlInfoScrollStringGroup;
 import blanco.db.common.stringgroup.BlancoDbSqlInfoTypeStringGroup;
+import blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure;
+import blanco.db.common.valueobject.BlancoDbDynamicConditionStructure;
 import blanco.db.common.valueobject.BlancoDbSqlInfoStructure;
 import blanco.dbmetadata.BlancoDbMetaDataUtil;
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.dom.DOMResult;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SQL定義書の中間XMLを読み込んでJavaオブジェクト化します。
@@ -71,6 +69,11 @@ public class BlancoDbXmlParser {
      * SQL動的条件式定義が蓄えられているエレメント名。
      */
     private static final String ELEMENT_DYNAMICCONDITIONS = "blancodb-dynamicconditions";
+
+    /**
+     * SQL動的条件式関数定義が蓄えられているエレメント名。
+     */
+    private static final String ELEMENT_DYNAMICFUNCTIONS = "blancodb-dynamicfunctions";
 
     /**
      * SQL出力パラメータが蓄えられているエレメント名。
@@ -163,6 +166,9 @@ public class BlancoDbXmlParser {
 
         // SQL入力パラメータを展開します。
         expandInParameter(eleSheet, fSqlInfo);
+
+        // SQL動的条件式関数定義を展開します。
+        expandDynamicConditionFunction(eleSheet, fSqlInfo);
 
         // SQL動的条件式定義を展開します。
         expandDynamicCondition(eleSheet, fSqlInfo);
@@ -418,6 +424,18 @@ public class BlancoDbXmlParser {
             }
             dynamicCondition.setItem(targetItem);
 
+            /* 条件句タイプが関数の場合 */
+            if ("FUNCTION".equals(condition)) {
+                BlancoDbDynamicConditionFunctionStructure function = sqlInfo.getDynamicConditionFunctionMap().get(targetItem);
+                if (function == null) {
+                    throw new IllegalArgumentException(fBundle.getXml2javaclassErr023(sqlInfo.getName(), targetItem));
+                }
+                for (BlancoDbMetaDataColumnStructure columnStructure : function.getDbColumnList()) {
+                    columnStructure.setName(dynamicCondition.getTag());
+                }
+                dynamicCondition.setFunction(function);
+            }
+
             String comparison = BlancoStringUtil.null2Blank(
                     BlancoXmlUtil.getTextContent(
                             (Element) nodeLook, "comparison")
@@ -447,7 +465,7 @@ public class BlancoDbXmlParser {
                     BlancoXmlUtil.getTextContent(
                             (Element) nodeLook, "type")
             );
-            if (!"ORDERBY".equals(condition) && !"LITERAL".equals(condition) && type.length() == 0) {
+            if (!"ORDERBY".equals(condition) && !"LITERAL".equals(condition) && !"FUNCTION".equals(condition) && type.length() == 0) {
                 throw new IllegalArgumentException(fBundle
                         .getXml2javaclassErr016(sqlInfo.getName(), condition));
             }
@@ -465,6 +483,9 @@ public class BlancoDbXmlParser {
                 /* パラメータなし */
                 columnStructure.setTypeName(null);
                 columnStructure.setDataType(Types.OTHER);
+            } else if ("FUNCTION".equals(condition)) {
+                columnStructure.setTypeName(null);
+                columnStructure.setDataType(Types.OTHER);
             } else {
                 columnStructure.setTypeName(dynamicCondition.getType());
                 columnStructure.setDataType(BlancoDbMetaDataUtil
@@ -476,6 +497,115 @@ public class BlancoDbXmlParser {
                 }
             }
             System.out.println("condition = " + condition + ", type = " + type + ", dataType = " + BlancoDbMetaDataUtil.convertJdbcDataTypeToString(columnStructure.getDataType()));
+        }
+    }
+
+    /**
+     * 与えられたシートを解析してSQL動的条件式関数定義情報を展開します。
+     *
+     * @param elementSheet
+     *            シートオブジェクト。
+     * @param sqlInfo
+     *            抽象クエリオブジェクト。
+     */
+    private void expandDynamicConditionFunction(final Element elementSheet,
+                                        final BlancoDbSqlInfoStructure sqlInfo) {
+        final Element elementBlancoDbDynamicConditionFunctions = BlancoXmlUtil.getElement(
+                elementSheet, ELEMENT_DYNAMICFUNCTIONS);
+        if (elementBlancoDbDynamicConditionFunctions == null) {
+            return;
+        }
+
+        final NodeList nodeList = elementBlancoDbDynamicConditionFunctions
+                .getElementsByTagName("dynamicfunctions");
+        if (nodeList == null) {
+            // SQL入力パラメータはありません。
+            return;
+        }
+        final int nodeLength = nodeList.getLength();
+        for (int index = 0; index < nodeLength; index++) {
+            final Node nodeLook = nodeList.item(index);
+            if (nodeLook instanceof Element == false) {
+                continue;
+            }
+
+            final BlancoDbDynamicConditionFunctionStructure dynamicFunction = new BlancoDbDynamicConditionFunctionStructure();
+
+            String tag = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "tag"));
+            if (tag.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr018(sqlInfo.getName()));
+            }
+            dynamicFunction.setTag(tag);
+
+            String function = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "function"));
+            if (function.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr019(sqlInfo.getName(), tag));
+            }
+            dynamicFunction.setFunction(function);
+
+            String strParamNum = BlancoStringUtil.null2Blank(
+                    BlancoXmlUtil.getTextContent(
+                            (Element) nodeLook, "paramNum")
+            );
+            if (strParamNum.length() == 0) {
+                throw new IllegalArgumentException(fBundle
+                        .getXml2javaclassErr020(sqlInfo.getName(), tag));
+            }
+            int paramNum = 0;
+            try {
+                paramNum = Integer.parseInt(strParamNum);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException(fBundle.getXml2javaclassErr021(sqlInfo.getName(), tag), e);
+            }
+            dynamicFunction.setParamNum(paramNum);
+
+            dynamicFunction.setDoTest(
+                    "true".equals(BlancoStringUtil.null2Blank(
+                            BlancoXmlUtil.getTextContent(
+                                    (Element) nodeLook, "doTest")))
+            );
+
+            Class<? extends BlancoDbDynamicConditionFunctionStructure> clazz = dynamicFunction.getClass();
+            for (int i = 1; i <= paramNum; i++) {
+                String tagParamType = String.format("paramType%02d", i);
+
+                String strParamType = BlancoStringUtil.null2Blank(
+                        BlancoXmlUtil.getTextContent(
+                                (Element) nodeLook, tagParamType)
+                );
+                if (strParamType.length() == 0) {
+                    throw new IllegalArgumentException(fBundle
+                            .getXml2javaclassErr022(sqlInfo.getName(), tag, String.format("%02d", i)));
+                }
+                String strMethod = "set" + BlancoNameAdjuster.toClassName(tagParamType);
+                try {
+                    Method method = clazz.getMethod(strMethod, String.class);
+                    method.invoke(dynamicFunction, strParamType);
+                } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                    throw new IllegalArgumentException(fBundle
+                            .getXml2javaclassErr022(sqlInfo.getName(), tag, String.format("%02d", i)), e);
+                }
+                /* Make BlancoDbMetaDataColumnStructure for Function Parameters */
+                BlancoDbMetaDataColumnStructure columnStructure = new BlancoDbMetaDataColumnStructure();
+                columnStructure.setTypeName(strParamType);
+                columnStructure.setDataType(BlancoDbMetaDataUtil
+                        .convertJdbcDataType2Int(strParamType));
+                if (columnStructure.getDataType() == Integer.MIN_VALUE) {
+                    // 新様式のデータ型に合致しない場合には、旧様式として読み込みを行います。
+                    // ここでは、dataTypeおよびnullable について Java型から導出します。
+                    convertOldSqlInputTypeToJdbc(strParamType, columnStructure);
+                }
+                dynamicFunction.getDbColumnList().add(columnStructure);
+            }
+
+            /* sqlInfo に記憶 */
+            sqlInfo.getDynamicConditionFunctionMap().put(dynamicFunction.getTag(), dynamicFunction);
         }
     }
 
