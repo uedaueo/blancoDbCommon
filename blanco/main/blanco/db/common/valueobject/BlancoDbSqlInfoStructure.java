@@ -148,6 +148,14 @@ public class BlancoDbSqlInfoStructure {
     private Map<String, BlancoDbDynamicConditionFunctionStructure> fDynamicConditionFunctionMap = new java.util.HashMap<java.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure>();
 
     /**
+     * MySQL専用。検索型の場合に先頭のSELECT の後ろに  MAX_EXECUTION_TIME オプティマイザ・ヒントが設定されます。デフォルトは60000ms。実行時に変更可能。
+     *
+     * フィールド: [useTimeoutHintMySQL]。
+     * デフォルト: [false]。
+     */
+    private boolean fUseTimeoutHintMySQL = false;
+
+    /**
      * フィールド [name] の値を設定します。
      *
      * フィールドの説明: [SQL定義ID。]。
@@ -556,6 +564,29 @@ public class BlancoDbSqlInfoStructure {
     }
 
     /**
+     * フィールド [useTimeoutHintMySQL] の値を設定します。
+     *
+     * フィールドの説明: [MySQL専用。検索型の場合に先頭のSELECT の後ろに  MAX_EXECUTION_TIME オプティマイザ・ヒントが設定されます。デフォルトは60000ms。実行時に変更可能。]。
+     *
+     * @param argUseTimeoutHintMySQL フィールド[useTimeoutHintMySQL]に設定する値。
+     */
+    public void setUseTimeoutHintMySQL(final boolean argUseTimeoutHintMySQL) {
+        fUseTimeoutHintMySQL = argUseTimeoutHintMySQL;
+    }
+
+    /**
+     * フィールド [useTimeoutHintMySQL] の値を取得します。
+     *
+     * フィールドの説明: [MySQL専用。検索型の場合に先頭のSELECT の後ろに  MAX_EXECUTION_TIME オプティマイザ・ヒントが設定されます。デフォルトは60000ms。実行時に変更可能。]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[useTimeoutHintMySQL]から取得した値。
+     */
+    public boolean getUseTimeoutHintMySQL() {
+        return fUseTimeoutHintMySQL;
+    }
+
+    /**
      * このバリューオブジェクトの文字列表現を取得します。
      *
      * <P>使用上の注意</P>
@@ -588,6 +619,7 @@ public class BlancoDbSqlInfoStructure {
         buf.append(",connectTo=" + fConnectTo);
         buf.append(",dynamicConditionList=" + fDynamicConditionList);
         buf.append(",dynamicConditionFunctionMap=" + fDynamicConditionFunctionMap);
+        buf.append(",useTimeoutHintMySQL=" + fUseTimeoutHintMySQL);
         buf.append("]");
         return buf.toString();
     }
@@ -664,5 +696,8 @@ public class BlancoDbSqlInfoStructure {
         // Name: fDynamicConditionFunctionMap
         // Type: java.util.Map
         // フィールド[fDynamicConditionFunctionMap]はサポート外の型[java.util.Mapjava.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure]です。
+        // Name: fUseTimeoutHintMySQL
+        // Type: boolean
+        target.fUseTimeoutHintMySQL = this.fUseTimeoutHintMySQL;
     }
 }

@@ -47,6 +47,10 @@
           <value>Timeout</value>
           <value>タイムアウト</value>
         </propertykey>
+        <propertykey name="useTimeoutHintMySQL" waitX="2">
+          <value>Timeout(MySQL)</value>
+          <value>タイムアウト(MySQL)</value>
+        </propertykey>
         <propertykey name="connectionMethod" waitX="2">
           <value>connectionMethod</value>
           <value>接続方式</value>

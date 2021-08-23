@@ -835,6 +835,30 @@ public class BlancoDbCommonResourceBundle {
     }
 
     /**
+     * bundle[BlancoDbCommon], key[XML2JAVACLASS.ERR024]
+     *
+     * [SQL定義ID[{0}]で「検索型」でないのにタイムアウト(MySQL)が「使用する」に設定されています。] (ja)<br>
+     *
+     * @param arg0 置換文字列{0}を置換する値。java.lang.String型を与えてください。
+     * @return key[XML2JAVACLASS.ERR024]に対応する値。外部から読み込みができない場合には、定義書の値を戻します。必ずnull以外の値が戻ります。
+     */
+    public String getXml2javaclassErr024(final String arg0) {
+        // 初期値として定義書の値を利用します。
+        String strFormat = "SQL定義ID[{0}]で「検索型」でないのにタイムアウト(MySQL)が「使用する」に設定されています。";
+        try {
+            if (fResourceBundle != null) {
+                strFormat = fResourceBundle.getString("XML2JAVACLASS.ERR024");
+            }
+        } catch (MissingResourceException ex) {
+        }
+        final MessageFormat messageFormat = new MessageFormat(strFormat);
+        final StringBuffer strbuf = new StringBuffer();
+        // 与えられた引数を元に置換文字列を置き換えます。
+        messageFormat.format(new Object[] {arg0}, strbuf, null);
+        return strbuf.toString();
+    }
+
+    /**
      * bundle[BlancoDbCommon], key[XML2JAVACLASS.INFO001]
      *
      * [SQL定義ID[{0}]の動的関数定義[{1}]では試験実行のスキップが指定されています。] (ja)<br>

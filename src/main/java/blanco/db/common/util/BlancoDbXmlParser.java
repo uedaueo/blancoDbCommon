@@ -260,6 +260,13 @@ public class BlancoDbXmlParser {
         fSqlInfo.setUseBeanParameter(BlancoStringUtil.null2Blank(
                 BlancoXmlUtil.getTextContent(elementCommon,
                         "use-bean-parameter")).equals("true"));
+        fSqlInfo.setUseTimeoutHintMySQL(BlancoStringUtil.null2Blank(
+                        BlancoXmlUtil.getTextContent(elementCommon, "useTimeoutHintMySQL"))
+                .equals("true"));
+        if (fSqlInfo.getUseTimeoutHintMySQL() &&
+                fSqlInfo.getType() != BlancoDbSqlInfoTypeStringGroup.ITERATOR) {
+            throw new IllegalArgumentException(fBundle.getXml2javaclassErr024(fSqlInfo.getName()));
+        }
 
         {
             // ステートメント・タイムアウト
