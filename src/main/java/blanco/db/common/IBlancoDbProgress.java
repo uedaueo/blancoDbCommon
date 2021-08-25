@@ -11,15 +11,15 @@ package blanco.db.common;
 
 public interface IBlancoDbProgress {
     /**
-     * おのおののファイルが処理されるたびにコールバックされます。
+     * It will be called back each time each file is processed.
      * 
      * @param progressCurrent
-     *            現在の進捗
+     *            Current progress.
      * @param progressTotal
-     *            トータル数
+     *            Total count.
      * @param progressMessage
-     *            現在処理しているファイル名・表名など
-     * @return 中断したい場合にはfalse
+     *            File name, table name, etc. that is currently be processed.
+     * @return false if you want to interrupt.
      */
     boolean progress(final int progressCurrent, final int progressTotal,
             final String progressItem);

@@ -38,29 +38,28 @@ import blanco.dbmetadata.BlancoDbMetaDataSql;
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
 
 /**
- * SQL定義書の中間XMLファイルを入力として、SQL定義書に関する各種情報構造体を構築します。
+ * Constructs various information structures related to SQL definitions using intermediate files of SQL definitions as input.
  *
- * このクラスの中では、検索型のSQL文は実際にSQL文を実行します。SQL文を実行することにより、検索結果の列一覧を取得し、
- * SQL入力パラメータの妥当性のチェックを行ったり、あるいはSQL文が そもそも実行できるかどうかを確認することができます。
+ * In this class, for search type SQL statements, actually executes the SQL statement. By executing the SQL statement, we can get a list of columns in the search results, checks the validity of SQL input parameters, or checks if the SQL statement can be executed in the first place.
  *
  * @author Yasuo Nakanishi
  */
 public class BlancoDbXml2SqlInfo {
     /**
-     * blancoDbリソースバンドル情報へのアクセサ。
+     * An accessor to blancoDb resource bundle information.
      */
     private final BlancoDbCommonResourceBundle fBundle = new BlancoDbCommonResourceBundle();
 
     /**
-     * SQL定義書の中間XMLファイルを入力として、SQL定義書に関する各種情報構造体を構築します。
+     * Constructs various information structures related to SQL definitions using intermediate XML files of SQL definitions as input.
      *
      * @param conn
-     *            データベース接続。
+     *            Database connection.
      * @param dbSetting
-     *            blancoDb設定。
+     *            blancoDb settings.
      * @param fileSqlForm
-     *            入力とする中間XMLファイル。
-     * @return SQL定義情報構造のリスト。
+     *            An intermediate XML file to use as input.
+     * @return A list of the SQL definition information structure.
      * @throws SQLException
      * @throws SAXException
      * @throws IOException
@@ -79,7 +78,7 @@ public class BlancoDbXml2SqlInfo {
             final BlancoDbSqlInfoStructure sqlInfo = blancoDbDef.get(index);
 
             if (sqlInfo.getType() == BlancoDbSqlInfoTypeStringGroup.ITERATOR && BlancoDbExecuteSqlStringGroup.NONE != dbSetting.getExecuteSql()) {
-                // 収集されたもののうち、検索型については、データベース接続して試し打ちが行われます。
+                // Of the collected items, for the search type, it will be connect to the database and a trial run will be performed.
                 processIterator(conn, sqlInfo, dbSetting);
             }
         }
@@ -93,22 +92,22 @@ public class BlancoDbXml2SqlInfo {
         try {
             final BlancoDbQueryParserUtil parserUtil = new BlancoDbQueryParserUtil(sqlInfo);
 
-            // SQL文を実行して結果セットを取得し、ここから検索結果の列一覧を取得します。
-            // JDBCの機能を利用してSQL文を試し打ちし、検索結果の列一覧を取得するという、blancoDbの核ともいえる機能の実装箇所です。
+            // Executes the SQL statement to get the result set, and gets the list of columns of search results from here.
+            // This is the implementation part of the core function of blancoDb, which is to use the JDBC function to execute a SQL statement and get a list of columns of search results.
 
             List<BlancoDbMetaDataColumnStructure> nativeParam = parserUtil.convertSqlInParameter2NativeParameter(sqlInfo);
             if (dbSetting.getExecuteSql() == BlancoDbExecuteSqlStringGroup.NONE) {
-                // noneの場合には paramにnullをセットします。
+                // In the case of none, sets param to null.
                 nativeParam = null;
             }
 
-            // paramに値がセットされている場合にはSQLを実行します。
+            // If param is set to a value, SQL will be executed.
             final List<BlancoDbMetaDataColumnStructure> listResult = BlancoDbMetaDataSql
                     .getResultSetMetaData(conn,
                             parserUtil.getNaturalSqlStringForJava(sqlInfo.getDynamicConditionList()),
                             nativeParam);
 
-            // 検索結果セットの列の一覧について、収集後の情報として記憶します。
+            // Saves the list of columns in the search result set as post-collection information.
             sqlInfo.setResultSetColumnList(listResult);
 
         } catch (SQLException e) {

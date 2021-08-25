@@ -20,52 +20,52 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * blancoDbが利用するQueryパース・ユーティリティクラス
+ * Query parsing utility class used by blancoDb
  *
- * SQLの解釈および変換などを目的とします。
+ * Interprets and converts SQL.
  *
  * @author Tosiki Iga
  */
 public class BlancoDbQueryParserUtil {
     /**
-     * SQL入力パラメータとして判定するための正規表現文字列。
+     * Regular expression strings to be determined as SQL input parameter.
      */
     private static final String SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER_ONLY = "#[a-zA-Z0-9.\\-_\\P{InBasicLatin}]*\\b|#.*$";
     private static final String SZ_PARAMETER_FOR_DYNAMIC_CLAUSE_PARAMETER = "\\$\\{[a-zA-Z0-9.\\-_\\P{InBasicLatin}]*\\}|\\$\\{.*\\}$";
     private static final String SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER =
             SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER_ONLY + "|" + SZ_PARAMETER_FOR_DYNAMIC_CLAUSE_PARAMETER;
     /**
-     * SQL入力パラメータのマップ <br>
-     * TODO マップを利用していますが、これだと順序性が確保されません。
+     * Map of SQL input parameter <br>
+     * TODO: We currently use a map, but this does not ensure order.
      */
     private final Map<String, List<Integer>> fMapForSqlInputParameters = new Hashtable<>();
 
     /**
-     * オリジナルのSQL文字列
+     * The original SQL string.
      */
     private String fOriginalSqlQueryString = "";
 
     /**
-     * このメソッドが処理対象としているSQL情報の構造体。
+     * The structure of the SQL information that is processed by this method.
      */
     protected BlancoDbSqlInfoStructure fSqlInfo = null;
 
     /**
-     * blancoDbリソースバンドル情報へのアクセサ。
+     * An accessor to blancoDb resource bundle information.
      */
     private final BlancoDbCommonResourceBundle fBundle = new BlancoDbCommonResourceBundle();
 
     @SuppressWarnings("unchecked")
     public BlancoDbQueryParserUtil(final BlancoDbSqlInfoStructure argSqlInfo) {
-        // SQL情報の構造体を記憶します。
+        // Stores the SQL information structure.
         this.fSqlInfo = argSqlInfo;
-        // パラメータを記憶します。
+        // Stores the parameters.
         fOriginalSqlQueryString = this.fSqlInfo.getQuery();
 
 //        System.out.println("blancoDbCommon#BlancoDbQueryParserUtil sql = " + fOriginalSqlQueryString);
 
-        // 正規表現文字列インスタンスを生成します。
-        // TODO 正規表現による処理において不適切な状況が発生する可能性があります。
+        // Creates a regular expression string instance.
+        // TODO: Inappropriate situations may occur when processing with regular expressions.
         final Matcher matcher = Pattern.compile(
                 SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER).matcher(
                 fOriginalSqlQueryString);
@@ -75,10 +75,10 @@ public class BlancoDbQueryParserUtil {
             String name = matcher.group();
 //            System.out.println("blancoDbCommon: BlancoDbQueryParserUtil : " + name);
             if (name.startsWith("#")) {
-                // InParameter の場合は先頭の＃を除去します。
+                // In the case of InParameter, removes the leading "#".
                 name = name.substring(1);
             } else {
-                // DynamicClause の場合は ${} を取り除きます。
+                // In the case of DynamicClause, removes "${}".
                 name = this.stripTagName(name);
                 numPlace = this.getMinimumPlaceholders(name);
             }
@@ -102,7 +102,7 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * 入力されたSQL入力パラメータをint配列に変換します。
+     * Converts the SQL input parameters to an int array.
      *
      * @param sqlInputParameterFoundList
      * @return
@@ -119,32 +119,31 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * 試作：キーを元に、intをゲットします。
+     * Prototype: Gets the int based on the key.
      *
      * @param key
      * @return
      */
     public List<Integer> getSqlParameters(final String key) {
-        // マップからIteratorを作成している点に注意。
+        // Note that the Iterator is created from the map.
         return fMapForSqlInputParameters.get(key);
     }
 
     /**
-     * JDBCに実際に発行する際に利用されるナチュラルなSQL文
+     * Natural SQL statements used to actually publish to the JDBC.
      *
-     * SQL文からメタ情報を取得する際に利用されます。つまり、DotNet版など
-     * Java版以外の版のソースコード自動生成の際に、このメソッドが利用されます。
+     * Used to obtain meta information from SQL statements. In other words, this method is used for automatic source code generation for DotNet and other non-Java versions.
      *
      * @return
      */
     public String getNaturalSqlStringForJava(List<BlancoDbDynamicConditionStructure> dynamicConditionList) throws IllegalArgumentException {
         /*
-         * InParameter 分
+         * For InParameter
          */
         String naturalSql = fOriginalSqlQueryString.replaceAll(
                 SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER_ONLY, "?");
         /*
-         * DynamicClause 分
+         * For DynamicClause
          */
         final Matcher matcher = Pattern.compile(
                 SZ_PARAMETER_FOR_DYNAMIC_CLAUSE_PARAMETER).matcher(
@@ -159,7 +158,7 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * 動的条件句があるSQLを自然な形に変形します。
+     * Transforms SQL with dynamic conditional clauses into a natural form.
      * @param argDynamicConditionList
      * @param argTag
      * @param argQuery
@@ -207,8 +206,8 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * 必要な ? の最小値を取得する。
-     * BEWTEEN, NOT BETWEEN の場合は 2。
+     * Gets the minimum value of the required "?".
+     * 2 for BEWTEEN and NOT BETWEEN.
      * @param argTag
      * @return
      */
@@ -231,7 +230,7 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * DynamicClause タグの ${} を取り除きます。
+     * Removes "${}" from the DynamicClause tag.
      * @param name
      * @return
      */
@@ -242,28 +241,28 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * SQL定義書のSQL入力パラメータを、実際のJDBC上で実行されるSQL文のSQL入力パラメータへと変換します。
+     * Converts SQL input parameters of SQL definition into ones of SQL statements execused on the actual JDBC.
      *
      * @param sqlInfo
      * @return
      */
     public List<BlancoDbMetaDataColumnStructure> convertSqlInParameter2NativeParameter(
             final BlancoDbSqlInfoStructure sqlInfo) {
-        // 同一名称を実際のSQL上の ? に対応するために複数に展開します。
+        // Expands the same names into multiple names to correspond to "?" in the actual SQL.
         int maxNativeCol = 0;
         final Map<String, BlancoDbMetaDataColumnStructure> hashCol = new HashMap<String, BlancoDbMetaDataColumnStructure>();
 
         /*
-         * InParameter 分
+         * For InParameter
          */
         for (int indexCol = 0; indexCol < sqlInfo.getInParameterList().size(); indexCol++) {
             final BlancoDbMetaDataColumnStructure columnStructure = sqlInfo
                     .getInParameterList().get(indexCol);
             final List<Integer> listNativeCol = this.getSqlParameters(columnStructure.getName());
             if (listNativeCol == null) {
-                throw new IllegalArgumentException("SQL定義ID["
-                        + sqlInfo.getName() + "]の SQL入力パラメータ["
-                        + columnStructure.getName() + "]が結びついていません.");
+                throw new IllegalArgumentException("SQL input parameter ["
+                        + columnStructure.getName() + "] of SQL definition ID ["
+                        + sqlInfo.getName() + "] is not connected.");
             }
 
             for (int indexSearch = 0; indexSearch < listNativeCol.size(); indexSearch++) {
@@ -275,20 +274,20 @@ public class BlancoDbQueryParserUtil {
         }
 
 //        /*
-//         * parserUtil を作成しておく
+//         * Creates a parserUtil.
 //         */
 //        BlancoDbQueryParserUtil parserUtil = new BlancoDbQueryParserUtil(fSqlInfo);
 //
         /*
-         * DynamicClause 分
+         * For DynamicClause
          */
         for (BlancoDbDynamicConditionStructure dynamicClause : sqlInfo.getDynamicConditionList()) {
             final BlancoDbMetaDataColumnStructure columnStructure = dynamicClause.getDbColumn();
             final List<Integer> listNativeCol = this.getSqlParameters(columnStructure.getName());
             if (listNativeCol == null) {
-                throw new IllegalArgumentException("SQL定義ID["
-                        + sqlInfo.getName() + "]の SQL入力パラメータ["
-                        + columnStructure.getName() + "]が結びついていません.");
+                throw new IllegalArgumentException("SQL input parameter ["
+                        + columnStructure.getName() + "] of SQL definition ID ["
+                        + sqlInfo.getName() + "] is not connected.");
             }
 
             if ("FUNCTION".equals(dynamicClause.getCondition())) {
@@ -323,9 +322,9 @@ public class BlancoDbQueryParserUtil {
             final BlancoDbMetaDataColumnStructure objLook = hashCol.get(String
                     .valueOf(indexNativeCol));
             if (objLook == null) {
-                throw new IllegalArgumentException("SQL定義ID["
-                        + sqlInfo.getName() + "]の SQL入力パラメータ展開時に予期せぬ例外が発生. ("
-                        + indexNativeCol + ")番目の入力パラメータが取得できません。");
+                throw new IllegalArgumentException("Unexpected exception occurred during SQL input parameter expansion for SQL definition ID ["
+                        + sqlInfo.getName() + "]. Unables to get the ("
+                        + indexNativeCol + ")th input parameter.");
             }
             nativeParam.add(objLook);
         }
@@ -334,9 +333,9 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * tag名から動的条件句情報の構造クラスを取得します。
+     * Gets the structure class of the dynamic conditional clause information from the tag name.
      * @param argTag
-     * @return 見つからなければnullを返します。
+     * @return Returns null if not found.
      */
     public BlancoDbDynamicConditionStructure getConditionStructureByTag(
             final String argTag) {
@@ -350,13 +349,13 @@ public class BlancoDbQueryParserUtil {
     }
 
     /**
-     * 静的入力パラメータ分のみを ? に置き換えて自然なSQLを作成します。
+     * Replaces only the static input parameters with "?" to create a natural SQL.
      * @param escapedQuery
      * @return
      */
     public String getNaturalSqlStringOnlyStatic(String escapedQuery) {
         /*
-         * InParameter 分
+         * For InParameter
          */
         String naturalSql = escapedQuery.replaceAll(
                 SZ_PARAMETER_FOR_SQL_INPUT_PARAMETER_ONLY, "?");
@@ -377,7 +376,7 @@ public class BlancoDbQueryParserUtil {
     };
 
     /**
-     * 定義書上の比較演算子記号をSQLで使用可能なタイプに変換します。
+     * Converts comparison operator symbols in the definition to types that can be used in SQL.
      * @param term
      * @return
      */

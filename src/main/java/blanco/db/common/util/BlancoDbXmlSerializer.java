@@ -39,13 +39,13 @@ import blanco.dbmetadata.BlancoDbMetaDataUtil;
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
 
 /**
- * blancoDbのSQL情報リストをXMLファイルに書き出します。
+ * Writes the SQL information list of blancoDb to an XML file.
  * 
  * @author IGA Tosiki
  */
 public class BlancoDbXmlSerializer {
     /**
-     * blancoDbのSQL情報リストをXMLファイルに書き出します。
+     * Writes the SQL information list of blancoDb to an XML file.
      * 
      * @param resultList
      * @param fileOutput
@@ -55,7 +55,7 @@ public class BlancoDbXmlSerializer {
             final File fileOutput) {
         if (resultList == null) {
             throw new IllegalArgumentException(
-                    "XMLへの変換処理に、引数(resultList)としてnullが与えられました。");
+                    "The conversion process to XML has been given null as an argument (resultList).");
         }
 
         final DocumentBuilderFactory documentFactory = DocumentBuilderFactory
@@ -64,7 +64,7 @@ public class BlancoDbXmlSerializer {
         try {
             documentBuilder = documentFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ex1) {
-            System.out.println("ドキュメント作成時に例外が発生しました.:" + ex1.toString());
+            System.out.println("An exception was thrown during document creation:" + ex1.toString());
             ex1.printStackTrace();
             return;
         }
@@ -95,11 +95,11 @@ public class BlancoDbXmlSerializer {
             outStream.close();
             outStream = null;
         } catch (TransformerException ex) {
-            System.out.println("XMLドキュメント保存時に変換例外が発生しました.:" + ex.toString());
+            System.out.println("A conversion exception occurred when saving the XML document:" + ex.toString());
             ex.printStackTrace();
             return;
         } catch (IOException ex3) {
-            System.out.println("XMLドキュメント保存時に入出力例外が発生しました.:" + ex3.toString());
+            System.out.println("An I/O exception occurred when saving the XML document:" + ex3.toString());
             ex3.printStackTrace();
             return;
         } finally {
@@ -114,7 +114,7 @@ public class BlancoDbXmlSerializer {
     }
 
     /**
-     * 与えられたSQL情報をXMLエレメントに追加します。
+     * Adds the given SQL information to the XML element.
      * 
      * @param sqlInfo
      * @param document
@@ -140,7 +140,7 @@ public class BlancoDbXmlSerializer {
                 .getSingle() ? "true" : "false");
 
         if (sqlInfo.getType() == BlancoDbSqlInfoTypeStringGroup.ITERATOR) {
-            // 検索型の場合にのみscroll属性とupdatable属性を追加します。
+            // Adds the scroll and updatable attributes only for the search type.
             if (sqlInfo.getScroll() != BlancoDbSqlInfoScrollStringGroup.NOT_DEFINED) {
                 appendElementWithText(document, eleCommon, "scroll",
                         new BlancoDbSqlInfoScrollStringGroup()
@@ -189,21 +189,21 @@ public class BlancoDbXmlSerializer {
             parameters.appendChild(parameter);
         }
 
-        // TODO 出力パラメータ展開は、現在 まだ実装されていません。
+        // TODO: Output parameter expansion is currently not implemented yet.
 
         if (sqlInfo.getQuery() == null) {
-            throw new IllegalArgumentException("内部エラー。SQL情報にSQL文が抜けています。");
+            throw new IllegalArgumentException("Internal error: SQL statement is missing from SQL information.");
         }
         final CDATASection cdata = document.createCDATASection(sqlInfo
                 .getQuery());
         queryLine.appendChild(cdata);
 
-        // 最後の最後でルートノードに追加します。
+        // Adds it to the root node at the very end.
         eleRoot.appendChild(eleQuery);
     }
 
     /**
-     * エレメントにテキスト付きでエレメントを追加します。
+     * Adds an element with text to an element.
      * 
      * @param document
      * @param eleTarget
@@ -215,19 +215,19 @@ public class BlancoDbXmlSerializer {
             final String elementData) {
         if (document == null) {
             throw new IllegalArgumentException(
-                    "内部エラー: appendElementWithText: documentにnullが与えられました。");
+                    "Internal error: appendElementWithText: Null was given for document.");
         }
         if (eleTarget == null) {
             throw new IllegalArgumentException(
-                    "内部エラー: appendElementWithText: eleTargetにnullが与えられました。");
+                    "Internal error: appendElementWithText: Null was given for eleTarget.");
         }
         if (tagName == null) {
             throw new IllegalArgumentException(
-                    "内部エラー: appendElementWithText: tagNameにnullが与えられました。");
+                    "Internal error: appendElementWithText: Null was given for tagName.");
         }
         if (elementData == null) {
             throw new IllegalArgumentException(
-                    "内部エラー: appendElementWithText: elementDataにnullが与えられました。");
+                    "Internal error: appendElementWithText: Null was given for elementData.");
         }
 
         final Element eleWork = document.createElement(tagName);
