@@ -18,17 +18,17 @@ import blanco.dbmetadata.BlancoDbMetaDataTable;
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataTableStructure;
 
 /**
- * データベース・テーブルから情報を取得します。
+ * Gets information from a database table.
  * 
  * @author Toshiki IGA
  */
 public class BlancoDbTableParser {
     /**
-     * 表の一覧情報を取得します。
+     * Gets the list of information of a table.
      * 
      * @param conn
      * @param schema
-     *            nullの場合にはスキーマ指定なし。
+     *            If null, no schema is specified.
      * @return
      * @throws SQLException
      */
@@ -38,7 +38,7 @@ public class BlancoDbTableParser {
         final List<BlancoDbMetaDataTableStructure> listTables = BlancoDbMetaDataTable.getTables(metadata, schema, null,
                 new String[] { "TABLE" });
 
-        // 表にまつわる必要最低限のメタ情報を取得します。
+        // Gets the minimum necessary meta information about the table.
         for (int indexTable = 0; indexTable < listTables.size(); indexTable++) {
             final BlancoDbMetaDataTableStructure tableStructure = listTables.get(indexTable);
 
@@ -48,7 +48,7 @@ public class BlancoDbTableParser {
             tableStructure.setPrimaryKeys(BlancoDbMetaDataTable.getPrimaryKeys(metadata, tableStructure.getCatalog(),
                     schema, tableStructure.getName()));
 
-            // 外部キー関連のメタ情報については、速度アップを目的として取得を省略しています。
+            // Foreign key-related meta information is omitted for the purpose of speeding up the process.
         }
 
         return listTables;

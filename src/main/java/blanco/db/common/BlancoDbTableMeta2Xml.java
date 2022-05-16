@@ -1,5 +1,5 @@
 /**
- * このクラスは別プロダクト化される予定。
+ * This class will be made into a separate product.
  */
 package blanco.db.common;
 
@@ -32,35 +32,35 @@ import blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure;
 import blanco.dbmetadata.valueobject.BlancoDbMetaDataTableStructure;
 
 /**
- * リレーショナルデータベースから得られる表情報をもとに、単一表アクセサのためのXML中間ファイルを生成します。
+ * Generates XML intermediate file for the single table accessor based on table information obtained from a relational database.
  * 
- * リレーショナルデータベースからメタ情報を取り出す処理そのものは、このクラスではなく、別のプロダクト blancoDbMetaDataが担います。
+ * The process of getting meta information from the relational database itself  is not handled by this class, but by another product, blancoDbMetaData.
  */
 public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
     /**
-     * 単一表のクラスに付けられるプレフィックス。
+     * Prefix to be attached to the single table class.
      */
     public static final String CLASS_PREFIX = "Simple";
 
     /**
-     * 各種リソースバンドル。
+     * Various resource bundles.
      */
     private final BlancoDbCommonResourceBundle fBundle = new BlancoDbCommonResourceBundle();
 
     /**
-     * blancoDbに関する設定情報。
+     * Configuration information about blandoDb.
      */
     private BlancoDbSetting fDbSetting = null;
 
     /**
-     * 自動生成したSQL文をフォーマットするかどうか。
+     * Whether to format auto-generated SQL statements.
      * 
-     * 2006.12.01時点ではデフォルトは falseとします。
+     * As of 2006.12.01, the default is false.
      */
     private boolean fFormatSql = false;
 
     /**
-     * 自動生成したSQL文をフォーマットするかどうか。
+     * Whether to format auto-generated SQL statements.
      * 
      * @param argFormatSql
      */
@@ -69,14 +69,14 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
     }
 
     /**
-     * リレーショナルデータベースから得られる表情報をもとに、単一表アクセサのためのXML中間ファイルを生成します。
+     * Generates XML intermediate file for the single table accessor based on table information obtained from a relational database.
      * 
-     * リレーショナルデータベースからメタ情報を取り出す処理そのものは、このクラスではなく、別のプロダクト blancoDbMetaDataが担います。
+     * The process of getting meta information from the relational database itself  is not handled by this class, but by another product, blancoDbMetaData.
      * 
      * @param connDef
-     *            データベース接続情報。
+     *            Database connection information.
      * @param blancoSqlDirectory
-     *            出力先ディレクトリ。
+     *            Output destination directory.
      * @throws SQLException
      * @throws SAXException
      * @throws IOException
@@ -86,7 +86,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
     public void process(final BlancoDbSetting dbSetting,
             final File blancoSqlDirectory) throws SQLException {
         System.out.println(BlancoDbCommonConstants.PRODUCT_NAME + " ("
-                + BlancoDbCommonConstants.VERSION + ") 単一表アクセサSQL自動生成: 開始.");
+                + BlancoDbCommonConstants.VERSION + ") Auto-generation of the single table accessor: Start.");
         fDbSetting = dbSetting;
         Connection conn = null;
         try {
@@ -104,12 +104,12 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         } finally {
             BlancoDbUtil.close(conn);
             conn = null;
-            System.out.println("単一表アクセサSQL自動生成: 終了.");
+            System.out.println("Auto-generation of the single table accessor: End.");
         }
     }
 
     /**
-     * 表の単位で収集された情報をXMLファイルに書き出します。
+     * Writes the information collected by the table unit to an XML file.
      * 
      * @param dbInfoCollector
      * @param listTables
@@ -129,19 +129,19 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             }
 
             try {
-                System.out.println("表[" + table.getName() + "]を処理します");
+                System.out.println("Processes the table [" + table.getName() + "].");
                 processEveryTable(listTables, table, resultSqlInfo);
             } catch (StringIndexOutOfBoundsException ex) {
-                System.out.println("表[" + table.getName()
-                        + "]の処理の過程で例外が発生しました: " + ex.toString());
+                System.out.println("An exception occurred in the process of processing table [" + table.getName()
+                        + "]: " + ex.toString());
                 ex.printStackTrace();
 
-                // 例外発生時には、仕方が無いので 次の表を処理します。
+                // If an exception occurs, we have no choice but to process the following table.
                 conn.rollback();
                 continue;
             }
 
-            // 表の単位でSQL情報をXMLファイルに出力します。
+            // Outputs SQL information in units of tables to XML files.
             BlancoDbXmlSerializer.serialize(resultSqlInfo,
                     new File(outputDirectoryName + "/SimpleTable"
                             + BlancoNameAdjuster.toClassName(table.getName())
@@ -150,7 +150,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
     }
 
     /**
-     * おのおのの表を出力処理します。
+     * Outputs a table for each.
      * 
      * @param service
      * @param collector
@@ -167,12 +167,12 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             throws SQLException {
         generateSelect(listTables, table, resultSqlInfo);
 
-        // 更新可能カーソルが利用可能かどうかはメソッド内で判断します。
+        // It is determined in the method whether the updatable cursor is available or not.
         generateSelectUpdatable(listTables, table, resultSqlInfo);
 
         generateSelectColumn(listTables, table, resultSqlInfo);
 
-        // 2005.11.11 SelectAllメソッドは復活しました。
+        // 2005.11.11 SelectAll method is back.
         generateSelectAll(listTables, table, resultSqlInfo);
 
         generateInsert(listTables, table, resultSqlInfo, false);
@@ -184,7 +184,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
     }
 
     /**
-     * 表名のみについて、まずはクラス名に変換します。
+     * For table name only, first converts it to a class name.
      * 
      * @param table
      * @return
@@ -194,7 +194,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
     }
 
     /**
-     * 一行を検索するアクセサを生成します。
+     * Generates an accessor to search for a single line.
      * 
      * @param collector
      * @param metadata
@@ -228,7 +228,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                     .getColumns().get(indexCol);
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -241,7 +241,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstColumn) {
-            // ひとつも列が処理されませんでした。処理中断します。
+            // None of the columns were processed. Aborts the process.
             return;
         }
 
@@ -253,8 +253,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                     .getColumns().get(indexCol);
             if (BlancoDbUtil.isPrimaryKey(table, columnStructure)) {
                 if (isSkipTypeForSimpleTable(columnStructure)) {
-                    // 単一表としてはスキップすべき型です。
-                    // バイナリやリーダはキーとしては利用できません。
+                    // It is a type that should be skipped as a single table.
+                    // Binaries and readers cannot be used as keys.
                     continue;
                 }
 
@@ -283,9 +283,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstPrimaryKey) {
-            // プライマリーキーが一件も処理されていない際には、
-            // WHEREが作成されていません。
-            // 処理続行は危険と判断し、処理中断します。
+            // When no primary key has been processed, no WHERE has been created.
+            // It is considered dangerous to continue the process and aborts the process.
             return;
         }
 
@@ -294,17 +293,17 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             try {
                 sqlInfo.setQuery(getSqlFormatter().format(sqlInfo.getQuery()));
             } catch (BlancoSqlFormatterException e) {
-                // しかたがないので、そのまま進みます。
+                // We have no choice but to keep going.
                 e.printStackTrace();
             }
         }
 
-        // 最後の最後でルートノードに追加します。
+        // Adds it to the root node at the very end.
         resultSqlInfo.add(sqlInfo);
     }
 
     /**
-     * 更新可能な検索を生成します。
+     * Generates an updatable search.
      * 
      * @param collector
      * @param metadata
@@ -324,10 +323,10 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         case BlancoDbDriverNameStringGroup.SQLSERVER_2005:
         case BlancoDbDriverNameStringGroup.ORACLE:
         case BlancoDbDriverNameStringGroup.POSTGRESQL:
-            // blancoDbとして更新可能な検索に対応しているデータベースです。処理可能です。
+            // A database that supports updatable search as blancoDb. It is processable.
             break;
         default:
-            // 処理できません。
+            // Cannot process.
             return;
         }
 
@@ -349,10 +348,10 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         for (int indexCol = 0; indexCol < table.getColumns().size(); indexCol++) {
             final BlancoDbMetaDataColumnStructure columnStructure = table
                     .getColumns().get(indexCol);
-            // 更新可能で動かすために、全列を取得しています。
+            // To make it working with updatable, gets all columns.
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -365,7 +364,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstColumn) {
-            // ひとつも列が処理されませんでした。処理中断します。
+            // None of the columns were processed. Aborts the process.
             return;
         }
 
@@ -384,8 +383,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                     .getColumns().get(indexCol);
             if (BlancoDbUtil.isPrimaryKey(table, columnStructure)) {
                 if (isSkipTypeForSimpleTable(columnStructure)) {
-                    // 単一表としてはスキップすべき型です。
-                    // バイナリは検索キーに利用できません。
+                    // It is a type that should be skipped as a single table.
+                    // Binaries cannot be used as search keys.
                     continue;
                 }
 
@@ -414,9 +413,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstPrimaryKey) {
-            // プライマリーキーが一件も処理されていない際には、
-            // WHEREが作成されていません。
-            // 処理続行は危険と判断し、処理中断します。
+            // When no primary key has been processed, no WHERE has been created.
+            // It is considered dangerous to continue the process and aborts the process.
             return;
         }
 
@@ -432,19 +430,19 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             try {
                 sqlInfo.setQuery(getSqlFormatter().format(sqlInfo.getQuery()));
             } catch (BlancoSqlFormatterException e) {
-                // しかたがないので、そのまま進みます。
+                // We have no choice but to keep going.
                 e.printStackTrace();
             }
         }
 
-        // 最後の最後でルートノードに追加します。
+        // Adds it to the root node at the very end.
         resultSqlInfo.add(sqlInfo);
     }
 
     /**
-     * InputStreamおよびReaderにマップされる型について、個別にIteratorを生成します。
+     * Generates separate Iterator for the types that are mapped to InputStream and Reader.
      * 
-     * このIterator以外では InputStreamおよびReaderにマップされる型は項目や条件としては生成がスキップされます。
+     * Outside of this Iterator, the types mapped to InputStream and Reader will be skipped in generation as items or conditions.
      * 
      * @param collector
      * @param metadata
@@ -464,8 +462,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                     .getColumns().get(indexCol);
 
             if (isSkipTypeForSimpleTable(columnStructure) == false) {
-                // ここではバイナリおよびリーダ「のみ」を処理します。
-                // ※他の箇所と判定条件が反転している点に注目してください。
+                // It will process binaries and readers "only" here.
+                // Note that the condition is reversed in this area.
                 continue;
             }
 
@@ -477,11 +475,9 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             sqlInfo.setName(name);
             sqlInfo.setType(BlancoDbSqlInfoTypeStringGroup.ITERATOR);
 
-            // BINARYおよびASCIISTREAMの列へのアクセサを１行制約付で出力するかどうか。
-            // SQL Server 2000においては、１行制約付で生成を行うと、１行制約のgetSingleRowメソッド内の
-            // next() ＋ next() の2度呼び出しを行った時点で、一度目の検索結果の
-            // ストリームが閉じてしまうことが知られています。
-            // このような背景から、デフォルトは false である 非１行制約としたいです。
+            // Whether to output accessors to BINARY and ASCIISTREAM columns with single row constraints.
+            // In SQL Server 2000, it is known that if generation is done with single row constraint, the stream of the first search result will be closed when the next() + next() in the getSingleRow method of the single row constraint is called twice.
+            // With this in mind, we want to make it a non-single row constraint, which defaults to false.
             sqlInfo.setSingle(fBundle.getSimpleColBinaryAsciiSelectSinglerow()
                     .equals("true"));
             sqlInfo.setScroll(new BlancoDbSqlInfoScrollStringGroup()
@@ -500,7 +496,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                         .getColumns().get(indexPrimaryKey);
 
                 if (isSkipTypeForSimpleTable(columnPrimaryKey)) {
-                    // 条件としてはスキップすべき型です。
+                    // It is a type that should be skipped as a condition.
                     continue;
                 }
 
@@ -532,9 +528,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             }
 
             if (isFirstPrimaryKey) {
-                // プライマリーキーが一件も処理されていない際には、
-                // WHEREが作成されていません。
-                // 処理続行は危険と判断し、処理中断します。
+                // When no primary key has been processed, no WHERE has been created.
+                // It is considered dangerous to continue the process and aborts the process.
                 return;
             }
 
@@ -544,18 +539,18 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                     sqlInfo.setQuery(getSqlFormatter().format(
                             sqlInfo.getQuery()));
                 } catch (BlancoSqlFormatterException e) {
-                    // しかたがないので、そのまま進みます。
+                    // We have no choice but to keep going.
                     e.printStackTrace();
                 }
             }
 
-            // 最後の最後でルートノードに追加します。
+            // Adds it to the root node at the very end.
             resultSqlInfo.add(sqlInfo);
         }
     }
 
     /**
-     * 全項目を検索するIteratorを生成します。
+     * Generates an Iterator to search all items.
      * 
      * @param collector
      * @param metadata
@@ -590,7 +585,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                     .getColumns().get(indexCol);
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -604,7 +599,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstColumn) {
-            // ひとつも列が処理されませんでした。処理中断します。
+            // None of the columns were processed. Aborts the process.
             return;
         }
 
@@ -616,7 +611,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
                     .getColumns().get(indexCol);
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -632,9 +627,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstPrimaryKey) {
-            // プライマリーキーが一件も処理されていない際には、
-            // WHEREが作成されていません。
-            // 処理続行は危険と判断し、処理中断します。
+            // When no primary key has been processed, no WHERE has been created.
+            // It is considered dangerous to continue the process and aborts the process.
             return;
         }
 
@@ -643,17 +637,17 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             try {
                 sqlInfo.setQuery(getSqlFormatter().format(sqlInfo.getQuery()));
             } catch (BlancoSqlFormatterException e) {
-                // しかたがないので、そのまま進みます。
+                // We have no choice but to keep going.
                 e.printStackTrace();
             }
         }
 
-        // 最後の最後でルートノードに追加します。
+        // Adds it to the root node at the very end.
         resultSqlInfo.add(sqlInfo);
     }
 
     /**
-     * 挿入を行うInvokerを生成します。
+     * Generates an Invoker to perform the insertion.
      * 
      * @param collector
      * @param metadata
@@ -694,7 +688,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             }
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -707,8 +701,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstColumn) {
-            // ひとつも列が処理されていません。
-            // この組み合わせは生成をスキップします。
+            // None of the columns were processed.
+            // In the case of this combination, skips the generation.
             return;
         }
 
@@ -726,7 +720,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             }
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -754,9 +748,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         sql.append(")");
 
         if (isFirstPrimaryKey) {
-            // プライマリーキーが一件も処理されていない際には、
-            // WHEREが作成されていません。
-            // 処理続行は危険と判断し、処理中断します。
+            // When no primary key has been processed, no WHERE has been created.
+            // It is considered dangerous to continue the process and aborts the process.
             return;
         }
 
@@ -765,19 +758,19 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             try {
                 sqlInfo.setQuery(getSqlFormatter().format(sqlInfo.getQuery()));
             } catch (BlancoSqlFormatterException e) {
-                // しかたがないので、そのまま進みます。
+                // We have no choice but to keep going.
                 e.printStackTrace();
             }
         }
 
         if (isIgnoreNullable == false || isNullableColumnExist) {
-            // NULL許容列が処理された場合にのみXMLに追加します。
+            // Adds to XML only if a NULL-allowed column has been processed.
             resultSqlInfo.add(sqlInfo);
         }
     }
 
     /**
-     * 更新を行うInvokerを生成します。
+     * Generates an Invoker that performs the update.
      * 
      * @param collector
      * @param metadata
@@ -812,7 +805,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             }
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -840,8 +833,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstColumn) {
-            // ひとつも列が処理されていません。
-            // この組み合わせは生成をスキップします。
+            // None of the columns were processed.
+            // In the case of this combination, skips the generation.
             return;
         }
 
@@ -856,7 +849,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             }
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -877,9 +870,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstPrimaryKey) {
-            // プライマリーキーが一件も処理されていない際には、
-            // WHEREが作成されていません。
-            // 処理続行は危険と判断し、処理中断します。
+            // When no primary key has been processed, no WHERE has been created.
+            // It is considered dangerous to continue the process and aborts the process.
             return;
         }
 
@@ -888,17 +880,17 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             try {
                 sqlInfo.setQuery(getSqlFormatter().format(sqlInfo.getQuery()));
             } catch (BlancoSqlFormatterException e) {
-                // しかたがないので、そのまま進みます。
+                // We have no choice but to keep going.
                 e.printStackTrace();
             }
         }
 
-        // 最後の最後でルートノードに追加します。
+        // Adds it to the root node at the very end.
         resultSqlInfo.add(sqlInfo);
     }
 
     /**
-     * 削除を行うInvokerを生成します。
+     * Generates an Invoker that performs the deletion.
      * 
      * @param collector
      * @param metadata
@@ -933,7 +925,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             }
 
             if (isSkipTypeForSimpleTable(columnStructure)) {
-                // 単一表としてはスキップすべき型です。
+                // It is a type that should be skipped as a single table.
                 continue;
             }
 
@@ -961,8 +953,8 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         }
 
         if (isFirstColumn) {
-            // ひとつも列が処理されていません。
-            // この組み合わせは生成をスキップします。
+            // None of the columns were processed.
+            // In the case of this combination, skips the generation.
             return;
         }
 
@@ -971,18 +963,17 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
             try {
                 sqlInfo.setQuery(getSqlFormatter().format(sqlInfo.getQuery()));
             } catch (BlancoSqlFormatterException e) {
-                // しかたがないので、そのまま進みます。
+                // We have no choice but to keep going.
                 e.printStackTrace();
             }
         }
 
-        // 最後の最後でルートノードに追加します。
+        // Adds it to the root node at the very end.
         resultSqlInfo.add(sqlInfo);
     }
 
     /**
-     * 与えられたSQL上の名称(表名または列名)にエスケープするべき文字(スペース)が含まれている場合に、表名そのものをダブルクオートでエスケープします
-     * 。
+     * If the given SQL name (table name or column name) contains characters (spaces) that should be escaped, escapes the table name itself with double quotes.
      * 
      * @param tableName
      * @return
@@ -1004,24 +995,24 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
     }
 
     /**
-     * SQL整形フォーマッタを取得します。
+     * Gets the SQL formatter.
      * 
-     * @return SQL整形フォーマッタ。
+     * @return The SQL formatter.
      */
     private static BlancoSqlFormatter getSqlFormatter() {
         return new BlancoSqlFormatter(new BlancoSqlRule());
     }
 
     /**
-     * 単一表の処理としてスキップすべき型であるかどうか判定します。
+     * Determines if a type should be skipped as a single table operation.
      * 
-     * ※このメソッドは、リレーショナルデータベース、あるいはデータベースAPIにより可変となる箇所です。
+     * Note: This method is variable depending on the relational database or database API.
      * 
-     * TODO Java言語以外においてこのクラスを利用する際には、このメソッドをオーバーライドする必要があります。
+     * TODO: If you want to use this class in a non-Java language, you need to override this method.
      * 
      * @param argTypeName
-     *            型名。パッケージ名を除く。
-     * @return スキップすべき型の場合にはtrue。
+     *            Type name. Excluding package names.
+     * @return true if the type should be skipped.
      */
     protected boolean isSkipTypeForSimpleTable(
             final BlancoDbMetaDataColumnStructure columnStructure) {
@@ -1045,7 +1036,7 @@ public abstract class BlancoDbTableMeta2Xml implements IBlancoDbProgress {
         case Types.OTHER:
         case Types.REF:
         case Types.DATALINK:
-        case Types.ROWID:// さしあたりサポート範囲外にマップします。
+        case Types.ROWID: // For now, maps outside the scope of support.
             return true;
         default:
             return false;

@@ -587,15 +587,15 @@ public class BlancoDbSqlInfoStructure {
     }
 
     /**
-     * このバリューオブジェクトの文字列表現を取得します。
+     * Gets the string representation of this value object.
      *
-     * <P>使用上の注意</P>
+     * <P>Precautions for use</P>
      * <UL>
-     * <LI>オブジェクトのシャロー範囲のみ文字列化の処理対象となります。
-     * <LI>オブジェクトが循環参照している場合には、このメソッドは使わないでください。
+     * <LI>Only the shallow range of the object will be subject to the stringification process.
+     * <LI>Do not use this method if the object has a circular reference.
      * </UL>
      *
-     * @return バリューオブジェクトの文字列表現。
+     * @return String representation of a value object.
      */
     @Override
     public String toString() {
@@ -625,12 +625,12 @@ public class BlancoDbSqlInfoStructure {
     }
 
     /**
-     * このバリューオブジェクトを指定のターゲットに複写します。
+     * Copies this value object to the specified target.
      *
-     * <P>使用上の注意</P>
+     * <P>Cautions for use</P>
      * <UL>
-     * <LI>オブジェクトのシャロー範囲のみ複写処理対象となります。
-     * <LI>オブジェクトが循環参照している場合には、このメソッドは使わないでください。
+     * <LI>Only the shallow range of the object will be subject to the copying process.
+     * <LI>Do not use this method if the object has a circular reference.
      * </UL>
      *
      * @param target target value object.
@@ -659,13 +659,13 @@ public class BlancoDbSqlInfoStructure {
         target.fQuery = this.fQuery;
         // Name: fInParameterList
         // Type: java.util.List
-        // フィールド[fInParameterList]はサポート外の型[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
+        // Field[fInParameterList] is an unsupported type[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure].
         // Name: fOutParameterList
         // Type: java.util.List
-        // フィールド[fOutParameterList]はサポート外の型[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
+        // Field[fOutParameterList] is an unsupported type[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure].
         // Name: fResultSetColumnList
         // Type: java.util.List
-        // フィールド[fResultSetColumnList]はサポート外の型[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
+        // Field[fResultSetColumnList] is an unsupported type[java.util.Listblanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure].
         // Name: fSingle
         // Type: boolean
         target.fSingle = this.fSingle;
@@ -692,10 +692,10 @@ public class BlancoDbSqlInfoStructure {
         target.fConnectTo = this.fConnectTo;
         // Name: fDynamicConditionList
         // Type: java.util.List
-        // フィールド[fDynamicConditionList]はサポート外の型[java.util.Listblanco.db.common.valueobject.BlancoDbDynamicConditionStructure]です。
+        // Field[fDynamicConditionList] is an unsupported type[java.util.Listblanco.db.common.valueobject.BlancoDbDynamicConditionStructure].
         // Name: fDynamicConditionFunctionMap
         // Type: java.util.Map
-        // フィールド[fDynamicConditionFunctionMap]はサポート外の型[java.util.Mapjava.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure]です。
+        // Field[fDynamicConditionFunctionMap] is an unsupported type[java.util.Mapjava.lang.String, blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure].
         // Name: fUseTimeoutHintMySQL
         // Type: boolean
         target.fUseTimeoutHintMySQL = this.fUseTimeoutHintMySQL;

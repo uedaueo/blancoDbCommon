@@ -33,11 +33,11 @@ import blanco.xml.bind.valueobject.BlancoXmlDocument;
 import blanco.xml.bind.valueobject.BlancoXmlElement;
 
 /**
- * blancoDb の共通ユーティリティ・クラス。
+ * Common utility class for blancoDb.
  */
 public class BlancoDbUtil {
     /**
-     * プライマリキーであるかどうかをチェックするメソッド。
+     * A method to check if it is a primary key.
      * 
      * @param table
      * @param columnStructure
@@ -50,7 +50,7 @@ public class BlancoDbUtil {
             final BlancoDbMetaDataKeyStructure columnLook = (BlancoDbMetaDataKeyStructure) table
                     .getPrimaryKeys().get(index);
             if (columnLook.getPkcolumnName().equals(columnStructure.getName())) {
-                // プライマリキーです。
+                // Primary key.
                 return true;
             }
         }
@@ -58,9 +58,9 @@ public class BlancoDbUtil {
     }
 
     /**
-     * ランタイムパッケージのルートフォルダを取得します。
+     * Gets the root folder of the runtime package.
      * 
-     * 指定がない場合には基準ディレクトリが利用されます。
+     * If not specified, the base directory will be used.
      * 
      * @param dbSetting
      * @return
@@ -74,7 +74,7 @@ public class BlancoDbUtil {
     }
 
     /**
-     * データベース接続の確立を試みます。
+     * Attempts to establish a database connection.
      * 
      * @param connDef
      * @throws SQLException
@@ -83,7 +83,7 @@ public class BlancoDbUtil {
     @SuppressWarnings("deprecation")
     public static Connection connect(final BlancoDbSetting dbSetting)
             throws SQLException, ClassNotFoundException {
-        System.out.println("データベース接続をオープンします.");
+        System.out.println("Opens a database connection.");
 
         try {
             ClassLoader loader = null;
@@ -106,7 +106,7 @@ public class BlancoDbUtil {
                         urlArray[index++] = new File(look).toURL();
                     } catch (MalformedURLException e) {
                         throw new IllegalArgumentException(
-                                "JDBC 接続確立: jar ファイルの URL 取得に失敗しました。", e);
+                                "JDBC connection establishing: Failed to get URL of jar file.", e);
                     }
                 }
                 loader = BlancoDbMetaDataUtil.loadDriverClass(urlArray,
@@ -127,14 +127,14 @@ public class BlancoDbUtil {
                         dbSetting.getJdbcpassword(), loader);
             }
 
-            // 自動コミットをOFFに設定します。
+            // Sets auto-commit to OFF.
             conn.setAutoCommit(false);
             return conn;
         } catch (SQLException ex) {
-            System.out.println("JDBC接続の確立に失敗しました: " + ex.toString());
+            System.out.println("Failed to establish a JDBC connection: " + ex.toString());
             throw ex;
         } catch (ClassNotFoundException ex) {
-            System.out.println("JDBC接続の確立に失敗しました: " + ex.toString());
+            System.out.println("Failed to establish a JDBC connection: " + ex.toString());
             throw ex;
         }
     }
@@ -142,25 +142,25 @@ public class BlancoDbUtil {
     public static void close(final Connection conn) {
         if (conn != null) {
             try {
-                System.out.println("データベース接続をクローズします. (rollbackしてcloseします)");
+                System.out.println("Closes the database connection. (closes after rollbacks)");
                 try {
                     conn.rollback();
                 } finally {
                     conn.close();
                 }
             } catch (SQLException e) {
-                System.out.println("JDBC接続の開放に失敗しました: " + e.toString());
+                System.out.println("Failed to open a JDBC connection: " + e.toString());
                 e.printStackTrace();
             }
         }
     }
 
     /**
-     * データベースのバージョン情報などを取得します。
+     * Gets database version information and etc.
      */
     public static void getDatabaseVersionInfo(final Connection conn,
             final BlancoDbSetting dbSetting) {
-        System.out.println("JDBCドライバの基礎情報を取得します。");
+        System.out.println("Gets the basic information about the JDBC driver.");
         try {
             final DatabaseMetaData databaseMetaData = conn.getMetaData();
 
@@ -175,7 +175,7 @@ public class BlancoDbUtil {
                 System.out.println("  DatabaseMinorVersion:"
                         + databaseMetaData.getDatabaseMinorVersion());
             } catch (java.lang.AbstractMethodError er) {
-                // SQL Server 2000 JDBC Driverは このメソッドをサポートしません。
+                // SQL Server 2000 JDBC Driver does not support this method.
                 // System.out.println(er.toString());
             } catch (SQLException ex) {
             }
@@ -185,17 +185,17 @@ public class BlancoDbUtil {
                 System.out.println("  JDBCMinorVersion:"
                         + databaseMetaData.getJDBCMinorVersion());
             } catch (java.lang.AbstractMethodError er) {
-                // SQL Server 2000 JDBC Driverは このメソッドをサポートしません。
+                // SQL Server 2000 JDBC Driver does not support this method.
                 // System.out.println(er.toString());
             } catch (SQLException ex) {
-                // Oracle 9i JDBC Driverは このメソッドをサポートしません。
+                // Oracle 9i JDBC Driver does not support this method.
             }
 
             dbSetting.setDriverName(new BlancoDbDriverNameStringGroup()
                     .convertToInt(driverName));
             if (BlancoDbDriverNameStringGroup.NOT_DEFINED == dbSetting
                     .getDriverName()) {
-                System.out.println("未知のJDBCドライバです: " + driverName);
+                System.out.println("Unknown JDBC driver: " + driverName);
             }
 
         } catch (SQLException e1) {
@@ -205,14 +205,14 @@ public class BlancoDbUtil {
     }
 
     /**
-     * Eclipse Java プロジェクトからクラスパス情報を読み取り。
+     * Loads classpath information from Eclipse Java project.
      * 
-     * 「.classpath」ファイルの記載内容を入力とします。
+     * Uses the contents of the ".classpath" file as input.
      * 
      * @param fileClasspath
-     *            入力となる「.classpath」ファイル。
+     *            A ".classpath" file as input.
      * @param dbSetting
-     *            出力となる DB 情報。
+     *            DB information to be output.
      */
     public static void readClasspathEntryFromEclipseJavaProject(
             final File fileClasspath, final BlancoDbSetting dbSetting) {
@@ -248,8 +248,7 @@ public class BlancoDbUtil {
     }
 
     /**
-     * 基準パッケージを取得します。BlancoDbSqlInfoStructure を優先し、無い場合には BlancoDbSetting
-     * を利用して確定させます。
+     * Gets the base package, preferably BlancoDbSqlInfoStructure, and if it is not there, uses BlancoDbSetting to determine it.
      * 
      * @param sqlInfo
      * @param dbSetting

@@ -6,7 +6,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * メッセージ定義[BlancoDbCommonPlugin]が内部的に利用するリソースバンドルクラス。
+ * A resource bundle class used internally by the message definition [BlancoDbCommonPlugin].
  *
  * リソースバンドル定義: [BlancoDbCommonPluginMessage]。<BR>
  * このクラスはリソースバンドル定義書から自動生成されたリソースバンドルクラスです。<BR>
@@ -61,9 +61,9 @@ class BlancoDbCommonPluginMessageResourceBundle {
     }
 
     /**
-     * 内部的に保持しているリソースバンドルオブジェクトを取得します。
+     * Gets the resource bundle object held internally.
      *
-     * @return 内部的に保持しているリソースバンドルオブジェクト。
+     * @return The resource bundle object held internally.
      */
     public ResourceBundle getResourceBundle() {
         return fResourceBundle;

@@ -38,59 +38,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SQL定義書の中間XMLを読み込んでJavaオブジェクト化します。
+ * Reads the intermediate XML of the SQL definition document and turns it into a Java object.
  *
  * @author IGA Tosiki
  */
 public class BlancoDbXmlParser {
 	/**
-	 * C#.NET の  SQL 入力パラメータの挙動の構造的な問題に対する対処方法。
+	 * How to deal with structual problems in the behavior of SQL input parameters in C#.NET.
 	 *
-	 * FIXME いずれ、この変数を外部化してください。
+	 * FIXME: Externalize this variable eventually.
 	 */
 	private static final boolean IS_FORCE_CS_DOTNET_STRING_AS_NVARCHAR = false;
 
 	/**
-     * blancoDbリソースバンドル情報へのアクセサ。
+     * An accessor to blancoDb resource bundle information.
      */
     private final BlancoDbCommonResourceBundle fBundle = new BlancoDbCommonResourceBundle();
 
     /**
-     * 共通情報が蓄えられているエレメント名。
+     * The element name in which common information is stored.
      */
     private static final String ELEMENT_COMMON = "blancodb-common";
 
     /**
-     * SQL入力パラメータが蓄えられているエレメント名。
+     * The element name in which SQL input parameter is stored.
      */
     private static final String ELEMENT_INPARAMETERS = "blancodb-inparameters";
 
     /**
-     * SQL動的条件式定義が蓄えられているエレメント名。
+     * The element name in which SQL dynamic condition definition is stored.
      */
     private static final String ELEMENT_DYNAMICCONDITIONS = "blancodb-dynamicconditions";
 
     /**
-     * SQL動的条件式関数定義が蓄えられているエレメント名。
+     * The element name in which SQL dynamic condition function definition is stored.
      */
     private static final String ELEMENT_DYNAMICFUNCTIONS = "blancodb-dynamicfunctions";
 
     /**
-     * SQL出力パラメータが蓄えられているエレメント名。
+     * The element name in which SQL output parameter is stored.
      */
     private static final String ELEMENT_OUTPARAMETERS = "blancodb-outparameters";
 
     /**
-     * SQL文が蓄えられているエレメント名。
+     * The element name in which SQL statement is stored.
      */
     private static final String ELEMENT_QUERY = "blancodb-query";
 
     /**
-     * SQL定義書の中間XMLを入力に、SQL定義書情報を収集します。
+     * Collects SQL definition document information using the intermediate XML of the SQL definition document as input.
      *
      * @param fileSqlForm
-     *            処理を行いたいSQL定義書のXML中間形式ファイル。
-     * @return 解析後のSQL定義書のリスト。
+     *            An XML intermediate file of the SQL definition you want to process.
+     * @return A list of SQL definitions after parsing.
      * @throws SQLException
      * @throws SAXException
      * @throws IOException
@@ -100,10 +100,10 @@ public class BlancoDbXmlParser {
     public List<BlancoDbSqlInfoStructure> parse(final File fileSqlForm)
             throws SQLException, SAXException, IOException,
             ParserConfigurationException, TransformerException {
-        // blancoDb定義情報
+        // blancoDb definition information.
         final List<BlancoDbSqlInfoStructure> resultBlancoDbDef = new ArrayList<BlancoDbSqlInfoStructure>();
 
-        // XMLファイルをDOMとしてパースします。
+        // Parses an XML file as a DOM.
         InputStream inStream = null;
         final DOMResult result;
         try {
@@ -113,10 +113,10 @@ public class BlancoDbXmlParser {
             inStream.close();
         }
 
-        // ルートノードを取得します。
+        // Gets the root node.
         final Node nodeRootNode = result.getNode();
         if (nodeRootNode == null) {
-            // XMLファイルではありません。
+            // It is not an XML file.
             return resultBlancoDbDef;
         }
 
@@ -126,14 +126,14 @@ public class BlancoDbXmlParser {
             return resultBlancoDbDef;
         }
 
-        // シートエレメントを展開します。
+        // Expands the sheet element.
         final NodeList listSheet = eleWorkbook.getElementsByTagName("sheet");
         if (listSheet == null) {
-            // シートが見つかりません。
+            // Cannot find the sheet.
             return resultBlancoDbDef;
         }
 
-        // 各シートエレメントについて処理を実施。
+        // Performs the processes for each sheet element.
         final int nodeLength = listSheet.getLength();
         for (int index = 0; index < nodeLength; index++) {
             final Node nodeSheet = listSheet.item(index);
@@ -148,60 +148,60 @@ public class BlancoDbXmlParser {
     }
 
     /**
-     * 与えられたシートエレメントを展開します。
+     * Expands the given sheet element.
      *
      * @param eleSheet
-     *            シートエレメント。
+     *            A sheet element.
      * @param resultBlancoDbDef
-     *            blancoDb定義情報。
+     *            blancoDb definition information.
      */
     private void expandSheet(final Element eleSheet,
             final List<BlancoDbSqlInfoStructure> resultBlancoDbDef) {
-        // 最初に共通情報を展開します。
+        // Expands the common information at first.
         final BlancoDbSqlInfoStructure fSqlInfo = expandCommon(eleSheet);
         if (fSqlInfo == null) {
-            // SQL定義書としてふさわしくないので、処理をスキップします。
+            // This is not appropriate for a SQL definition document, so skips the process.
             return;
         }
 
-        // SQL入力パラメータを展開します。
+        // Expands the SQL input parameter.
         expandInParameter(eleSheet, fSqlInfo);
 
-        // SQL動的条件式関数定義を展開します。
+        // Expands the SQL dynamic condition function definition.
         expandDynamicConditionFunction(eleSheet, fSqlInfo);
 
-        // SQL動的条件式定義を展開します。
+        // Expands the SQL dynamic condition definition.
         expandDynamicCondition(eleSheet, fSqlInfo);
 
-        // SQL出力パラメータを展開します。
+        // Expands the SQL output parameter.
         expandOutParameter(eleSheet, fSqlInfo);
 
-        // SQL文を展開します。
+        // Expands the SQL statement.
         expandQuery(eleSheet, fSqlInfo);
 
-        // ひととおりの情報をそろえた上で、収集した情報の妥当性チェックをおこないます。
+        // Once with all the information in place, checks the validity of the collected information.
         if (fSqlInfo.getQuery() == null || fSqlInfo.getQuery().length() == 0) {
-            // SQL文が取得できないものはエラー扱いします。
+            // If the SQL statement cannot be obtained, it will be treated as an error.
             throw new IllegalArgumentException(fBundle
                     .getXml2javaclassErr001(fSqlInfo.getName()));
         }
 
-        // 解析後のSQL定義書のリストへ情報を追加。
+        // Adds information to the list of SQL definitions after parsing.
         resultBlancoDbDef.add(fSqlInfo);
     }
 
     /**
-     * 与えられた共通エレメントを解析して情報を展開します。
+     * Analyzes the given common elements and expands the information.
      *
      * @param eleSheet
-     *            シートオブジェクト。
-     * @return 抽象クエリオブジェクト。
+     *            A sheet object.
+     * @return An abstract query object.
      */
     private BlancoDbSqlInfoStructure expandCommon(final Element eleSheet) {
         final Element elementCommon = BlancoXmlUtil.getElement(eleSheet,
                 ELEMENT_COMMON);
         if (elementCommon == null) {
-            // ELEMENT_COMMONが見つからない場合には、このシートをスキップします。
+            // If ELEMENT_COMMON is not found, skips this sheet.
             return null;
         }
 
@@ -210,9 +210,9 @@ public class BlancoDbXmlParser {
         fSqlInfo.setName(BlancoStringUtil.null2Blank(BlancoXmlUtil
                 .getTextContent(elementCommon, "name")));
         if (fSqlInfo.getName().length() == 0) {
-            // この定義書は処理の必要がありません。処理しないこととします。
-            // 従来はquery-typeが無指定の場合にも処理をスキップしていましたが、現在はエラー扱いとします。
-            // nameが見つかりません。
+            // This definition does not need to be processed. It should not be processed.
+            // In the past, the process was skipped even when query-type was unspecified, but now it is treated as an error.
+            // name is not found.
             return null;
         }
 
@@ -224,9 +224,9 @@ public class BlancoDbXmlParser {
         fSqlInfo.setType(new BlancoDbSqlInfoTypeStringGroup()
                 .convertToInt(queryType));
         if (fSqlInfo.getType() == BlancoDbSqlInfoTypeStringGroup.NOT_DEFINED) {
-            // 処理できません。中断します。
-            throw new IllegalArgumentException("サポートしないクエリタイプ["
-                    + fSqlInfo.getType() + "]が与えられました。処理中断します。");
+            // Cannot process. Aborts it.
+            throw new IllegalArgumentException("Unsupported query type ["
+                    + fSqlInfo.getType() + "] was given. Aborts the process.");
         }
 
         fSqlInfo.setDescription(BlancoStringUtil.null2Blank(BlancoXmlUtil
@@ -242,7 +242,7 @@ public class BlancoDbXmlParser {
                 BlancoXmlUtil.getTextContent(elementCommon, "connectTo")));
 
         if (fSqlInfo.getType() == BlancoDbSqlInfoTypeStringGroup.ITERATOR) {
-            // 検索型の場合にのみスクロール属性および更新可能属性を読み込みます。
+            // Loads scrolling and updatable attributes only for search type.
             fSqlInfo.setScroll(new BlancoDbSqlInfoScrollStringGroup()
                     .convertToInt(BlancoStringUtil.null2Blank(BlancoXmlUtil
                             .getTextContent(elementCommon, "scroll"))));
@@ -269,7 +269,7 @@ public class BlancoDbXmlParser {
         }
 
         {
-            // ステートメント・タイムアウト
+            // Statement timeout
             final String statementTimeout = BlancoXmlUtil.getTextContent(
                     elementCommon, "statementTimeout");
             if (BlancoStringUtil.null2Blank(statementTimeout).length() > 0) {
@@ -288,12 +288,12 @@ public class BlancoDbXmlParser {
     }
 
     /**
-     * 与えられたシートを解析してSQL入力パラメータ情報を展開します。
+     * Analyzes the given sheet and expands the SQL input parameter definition information.
      *
      * @param elementSheet
-     *            シートオブジェクト。
+     *            A sheet object.
      * @param sqlInfo
-     *            抽象クエリオブジェクト。
+     *            An abstract query object.
      */
     private void expandInParameter(final Element elementSheet,
             final BlancoDbSqlInfoStructure sqlInfo) {
@@ -306,7 +306,7 @@ public class BlancoDbXmlParser {
         final NodeList nodeList = elementBlancoDbInparameters
                 .getElementsByTagName("inparameter");
         if (nodeList == null) {
-            // SQL入力パラメータはありません。
+            // There is no SQL input parameter.
             return;
         }
         final int nodeLength = nodeList.getLength();
@@ -324,7 +324,7 @@ public class BlancoDbXmlParser {
             final String nullable = BlancoStringUtil.null2Blank(BlancoXmlUtil
                     .getTextContent((Element) nodeLook, "nullable"));
 
-            // 現在、descriptionは格納先がありません。
+            // Currently, there is no place to store description.
             // final String description = BlancoXmlUtil.getTextContent(
             // (Element) nodeLook, "description");
 
@@ -349,12 +349,12 @@ public class BlancoDbXmlParser {
                 columnStructure.setNullable(ResultSetMetaData.columnNoNulls);
             }
 
-            // 最初に新様式のデータ型であることと仮定して読み込みます。
+            // It will be loaded assuming that it is a new-style data type at first.
             columnStructure.setDataType(BlancoDbMetaDataUtil
                     .convertJdbcDataType2Int(type));
             if (columnStructure.getDataType() == Integer.MIN_VALUE) {
-                // 新様式のデータ型に合致しない場合には、旧様式として読み込みを行います。
-                // ここでは、dataTypeおよびnullable について Java型から導出します。
+                // If the data type does not match the new-style, it will be loaded as the old-style.
+                // In this section, it will derive dataType and nullable from Java types.
                 convertOldSqlInputTypeToJdbc(type, columnStructure);
             }
 
@@ -363,12 +363,12 @@ public class BlancoDbXmlParser {
     }
 
     /**
-     * 与えられたシートを解析してSQL動的条件式定義情報を展開します。
+     * Analyzes the given sheet and expands the SQL dynamic condition definition information.
      *
      * @param elementSheet
-     *            シートオブジェクト。
+     *            A sheet object.
      * @param sqlInfo
-     *            抽象クエリオブジェクト。
+     *            An abstract query object.
      */
     private void expandDynamicCondition(final Element elementSheet,
                                    final BlancoDbSqlInfoStructure sqlInfo) {
@@ -381,7 +381,7 @@ public class BlancoDbXmlParser {
         final NodeList nodeList = elementBlancoDbDynamicConditions
                 .getElementsByTagName("dynamicconditions");
         if (nodeList == null) {
-            // SQL入力パラメータはありません。
+            // There is no SQL input parameter.
             return;
         }
         final int nodeLength = nodeList.getLength();
@@ -431,7 +431,7 @@ public class BlancoDbXmlParser {
             }
             dynamicCondition.setItem(targetItem);
 
-            /* 条件句タイプが関数の場合 */
+            /* If the conditional clause type is function. */
             if ("FUNCTION".equals(condition)) {
                 BlancoDbDynamicConditionFunctionStructure function = sqlInfo.getDynamicConditionFunctionMap().get(targetItem);
                 if (function == null) {
@@ -458,9 +458,8 @@ public class BlancoDbXmlParser {
                             (Element) nodeLook, "logical")
             );
             /*
-             * WHERE の直後にも DynamicClause を置けるようにチェックを外します。
-             * 途中の定義で論理演算子を指定し忘れた場合、更新系ではruntimeまで
-             * エラーのチェックができません。
+             * Unchecks so that DynamicClause can also be placed immediately after WHERE.
+             * If you forget to specify the logical operator in the definition during the process, cannot check for errors until runtime in the case of update type.
              */
 //            if (!"ORDERBY".equals(condition) && logical.length() == 0) {
 //                throw new IllegalArgumentException(fBundle
@@ -481,13 +480,13 @@ public class BlancoDbXmlParser {
             sqlInfo.getDynamicConditionList().add(dynamicCondition);
 
             /*
-             * この動的条件句が対象とする型の情報を、dbColumnの形で作成しておく
+             * Creates information that this dynamic conditional clause targets as a dbColumn.
              */
             BlancoDbMetaDataColumnStructure columnStructure = new BlancoDbMetaDataColumnStructure();
             dynamicCondition.setDbColumn(columnStructure);
             columnStructure.setName(tag);
             if ("ORDERBY".equals(condition) || "LITERAL".equals(condition)) {
-                /* パラメータなし */
+                /* No parameter */
                 columnStructure.setTypeName(null);
                 columnStructure.setDataType(Types.OTHER);
             } else if ("FUNCTION".equals(condition)) {
@@ -498,8 +497,8 @@ public class BlancoDbXmlParser {
                 columnStructure.setDataType(BlancoDbMetaDataUtil
                         .convertJdbcDataType2Int(dynamicCondition.getType()));
                 if (columnStructure.getDataType() == Integer.MIN_VALUE) {
-                    // 新様式のデータ型に合致しない場合には、旧様式として読み込みを行います。
-                    // ここでは、dataTypeおよびnullable について Java型から導出します。
+                    // If the data type does not match the new-style, it will be loaded as the old-style.
+                    // In this section, it will derive dataType and nullable from Java types.
                     convertOldSqlInputTypeToJdbc(type, columnStructure);
                 }
             }
@@ -508,12 +507,12 @@ public class BlancoDbXmlParser {
     }
 
     /**
-     * 与えられたシートを解析してSQL動的条件式関数定義情報を展開します。
+     * Analyzes the given sheet and expands the SQL dynamic condition function definition information.
      *
      * @param elementSheet
-     *            シートオブジェクト。
+     *            A sheet object.
      * @param sqlInfo
-     *            抽象クエリオブジェクト。
+     *            An abstract query object.
      */
     private void expandDynamicConditionFunction(final Element elementSheet,
                                         final BlancoDbSqlInfoStructure sqlInfo) {
@@ -526,7 +525,7 @@ public class BlancoDbXmlParser {
         final NodeList nodeList = elementBlancoDbDynamicConditionFunctions
                 .getElementsByTagName("dynamicfunctions");
         if (nodeList == null) {
-            // SQL入力パラメータはありません。
+            // There is no SQL input parameter.
             return;
         }
         final int nodeLength = nodeList.getLength();
@@ -604,32 +603,32 @@ public class BlancoDbXmlParser {
                 columnStructure.setDataType(BlancoDbMetaDataUtil
                         .convertJdbcDataType2Int(strParamType));
                 if (columnStructure.getDataType() == Integer.MIN_VALUE) {
-                    // 新様式のデータ型に合致しない場合には、旧様式として読み込みを行います。
-                    // ここでは、dataTypeおよびnullable について Java型から導出します。
+                    // If the data type does not match the new-style, it will be loaded as the old-style.
+                    // In this section, it will derive dataType and nullable from Java types.
                     convertOldSqlInputTypeToJdbc(strParamType, columnStructure);
                 }
                 dynamicFunction.getDbColumnList().add(columnStructure);
             }
 
-            /* sqlInfo に記憶 */
+            /* Stores in sqlInfo. */
             sqlInfo.getDynamicConditionFunctionMap().put(dynamicFunction.getTag(), dynamicFunction);
         }
     }
 
     /**
-     * 与えられたシートを解析してSQL出力パラメータ情報を展開します。
+     * Analyzes the given sheet and expands the SQL output parameter information.
      *
      * @param elementSheet
-     *            シートオブジェクト。
+     *            A sheet object.
      * @param sqlInfo
-     *            抽象クエリオブジェクト。
+     *            An abstract query object.
      */
     private void expandOutParameter(final Element elementSheet,
             final BlancoDbSqlInfoStructure sqlInfo) {
         final Element elementBlancoDbOutparameters = BlancoXmlUtil.getElement(
                 elementSheet, ELEMENT_OUTPARAMETERS);
         if (elementBlancoDbOutparameters == null) {
-            // SQL出力パラメータはありません。
+            // There is no SQL output parameter.
             return;
         }
 
@@ -654,7 +653,7 @@ public class BlancoDbXmlParser {
             final String nullable = BlancoStringUtil.null2Blank(BlancoXmlUtil
                     .getTextContent((Element) nodeLook, "nullable"));
 
-            // 現在、descriptionは格納先がありません。
+            // Currently, there is no place to store description.
 
             final String paramNoString = (no == null ? "" : " No.[" + no + "] ");
             if (name == null || name.length() == 0) {
@@ -668,7 +667,7 @@ public class BlancoDbXmlParser {
                                 paramNoString, name));
             }
             if (sqlInfo.getType() != BlancoDbSqlInfoTypeStringGroup.CALLER) {
-                // caller以外の場合にはSQL出力パラメータはセットできません。
+                // If it is not a caller, cannot set the SQL output parameter.
                 throw new IllegalArgumentException(fBundle
                         .getXml2javaclassErr008(sqlInfo.getName(),
                                 paramNoString, name));
@@ -683,12 +682,12 @@ public class BlancoDbXmlParser {
                 columnStructure.setNullable(ResultSetMetaData.columnNoNulls);
             }
 
-            // 最初に新様式のデータ型であることと仮定して読み込みます。
+            // It will be loaded assuming that it is a new-style data type at first.
             columnStructure.setDataType(BlancoDbMetaDataUtil
                     .convertJdbcDataType2Int(type));
             if (columnStructure.getDataType() == Integer.MIN_VALUE) {
-                // 新様式のデータ型に合致しない場合には、旧様式として読み込みを行います。
-                // ここでは、dataTypeおよびnullable について Java型から導出します。
+                // If the data type does not match the new-style, it will be loaded as the old-style.
+                // In this section, it will derive dataType and nullable from Java types.
                 convertOldSqlInputTypeToJdbc(type, columnStructure);
             }
 
@@ -697,12 +696,12 @@ public class BlancoDbXmlParser {
     }
 
     /**
-     * 与えられたシートを解析してSQL文に関する情報を展開します。
+     * Analyzes the given sheet and expands the information about the SQL statement.
      *
      * @param elementSheet
-     *            シートオブジェクト。
+     *            A sheet object.
      * @param sqlInfo
-     *            抽象クエリオブジェクト。
+     *            An abstract query object.
      */
     private void expandQuery(final Element elementSheet,
             final BlancoDbSqlInfoStructure sqlInfo) {
@@ -726,7 +725,7 @@ public class BlancoDbXmlParser {
             if (query == null || query.length() == 0) {
                 query = "";
             } else {
-                // 文字列がすでに存在している場合にのみ改行を付与します。
+                // Adds a newline only if the string already exists.
                 query = query + "\n";
             }
             sqlInfo.setQuery(query + queryLine);
@@ -734,12 +733,11 @@ public class BlancoDbXmlParser {
     }
 
     /**
-     * 旧バージョンのSQL定義書において、SQL入力／出力パラメータの型名にJava/C#.NETの型名が与えられる。この型名を
-     * java.sql.Typesの型名に読み替えるためのルーチン。
+     * In older versions of SQL definitions, Java/C#.NET type names are given for SQL input/output parameter type names. This is a routine to replace this type name with the type name of java.sql.Types.
      *
-     * このメソッドは旧バージョンの定義書の読込処理の目的で存在します。
+     * This method exists for the purpose of processing the loading of definitions from previous versions.
      *
-     * TODO Java言語およびC#.NET言語に依存した記述があります。
+     * TODO: There are descriptions that depend on the Java and C#.NET.
      *
      * @param type
      * @param columnStructure
@@ -792,30 +790,30 @@ public class BlancoDbXmlParser {
         } else if (type.equals("java.io.Reader")) {
             columnStructure.setDataType(Types.LONGVARCHAR);
         } else if (type.equals("string")) {
-            // C#.NETの旧版定義書上の型。
+            // A type in the old version of C#.NET definitions.
             columnStructure.setDataType(Types.VARCHAR);
         	if (IS_FORCE_CS_DOTNET_STRING_AS_NVARCHAR) {
-        		// FIXME 2012.07.09 いずれ、この値は外部から設定できるように変更したい。
+        		// FIXME 2012.07.09: Eventually, we would like to change this value so that it can be set externally.
                 columnStructure.setDataType(Types.NVARCHAR);
         	}
         } else if (type.equals("string(Unicode)")) {
-            // C#.NETの旧版定義書上の型。
+            // A type in the old version of C#.NET definitions.
             columnStructure.setDataType(Types.NVARCHAR);
         } else if (type.equals("bool")) {
-            // C#.NETの旧版定義書上の型。
+            // A type in the old version of C#.NET definitions.
             columnStructure.setDataType(Types.BIT);
         } else if (type.equals("decimal")) {
-            // C#.NETの旧版定義書上の型。
+            // A type in the old version of C#.NET definitions.
             columnStructure.setDataType(Types.DECIMAL);
         } else if (type.equals("System.DateTime")) {
-            // C#.NETの旧版定義書上の型。
+            // A type in the old version of C#.NET definitions.
             columnStructure.setDataType(Types.TIMESTAMP);
         } else if (type.equals("byte[]")) {
-            // C#.NETの旧版定義書上の型。
+            // A type in the old version of C#.NET definitions.
             columnStructure.setDataType(Types.LONGVARBINARY);
         } else {
-            throw new IllegalArgumentException("blancoDbでサポートしない型[" + type
-                    + "]が与えられました。");
+            throw new IllegalArgumentException("A type that is not supported by blancoDb [" + type
+                    + "] was given.");
         }
     }
 }
