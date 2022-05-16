@@ -315,15 +315,15 @@ public class BlancoDbDynamicConditionStructure {
     }
 
     /**
-     * このバリューオブジェクトの文字列表現を取得します。
+     * Gets the string representation of this value object.
      *
-     * <P>使用上の注意</P>
+     * <P>Precautions for use</P>
      * <UL>
-     * <LI>オブジェクトのシャロー範囲のみ文字列化の処理対象となります。
-     * <LI>オブジェクトが循環参照している場合には、このメソッドは使わないでください。
+     * <LI>Only the shallow range of the object will be subject to the stringification process.
+     * <LI>Do not use this method if the object has a circular reference.
      * </UL>
      *
-     * @return バリューオブジェクトの文字列表現。
+     * @return String representation of a value object.
      */
     @Override
     public String toString() {
@@ -344,12 +344,12 @@ public class BlancoDbDynamicConditionStructure {
     }
 
     /**
-     * このバリューオブジェクトを指定のターゲットに複写します。
+     * Copies this value object to the specified target.
      *
-     * <P>使用上の注意</P>
+     * <P>Cautions for use</P>
      * <UL>
-     * <LI>オブジェクトのシャロー範囲のみ複写処理対象となります。
-     * <LI>オブジェクトが循環参照している場合には、このメソッドは使わないでください。
+     * <LI>Only the shallow range of the object will be subject to the copying process.
+     * <LI>Do not use this method if the object has a circular reference.
      * </UL>
      *
      * @param target target value object.
@@ -384,12 +384,12 @@ public class BlancoDbDynamicConditionStructure {
         target.fType = this.fType;
         // Name: fNote
         // Type: java.util.List
-        // フィールド[fNote]はサポート外の型[java.util.Listjava.lang.String]です。
+        // Field[fNote] is an unsupported type[java.util.Listjava.lang.String].
         // Name: fDbColumn
         // Type: blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure
-        // フィールド[fDbColumn]はサポート外の型[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure]です。
+        // Field[fDbColumn] is an unsupported type[blanco.dbmetadata.valueobject.BlancoDbMetaDataColumnStructure].
         // Name: fFunction
         // Type: blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure
-        // フィールド[fFunction]はサポート外の型[blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure]です。
+        // Field[fFunction] is an unsupported type[blanco.db.common.valueobject.BlancoDbDynamicConditionFunctionStructure].
     }
 }
