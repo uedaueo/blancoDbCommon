@@ -5,7 +5,7 @@
 	<groupId>blanco.db.common</groupId>
 	<artifactId>blanco-dbcommon</artifactId>
 	<packaging>jar</packaging>
-	<version>3.0.1</version>
+	<version>3.0.2</version>
 	<name>blanco-dbcommon</name>
 	<url>https://igapyon.github.io/blancofw-maven2</url>
 
@@ -53,74 +53,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>blanco.anttask</groupId>
-			<artifactId>blanco-anttask</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.batchprocess</groupId>
-			<artifactId>blanco-batchprocess</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.commons.io</groupId>
-			<artifactId>blanco-commons</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.cg</groupId>
-			<artifactId>blanco-cg</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.valueobject</groupId>
-			<artifactId>blanco-valueobject</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.constants</groupId>
-			<artifactId>blanco-constants</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.meta2xml</groupId>
-			<artifactId>blanco-meta2xml</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.resourcebundle</groupId>
-			<artifactId>blanco-resourcebundle</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.stringgroup</groupId>
-			<artifactId>blanco-stringgroup</artifactId>
-			<version>[0.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.dbmetadata</groupId>
-			<artifactId>blanco-dbmetadata</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
 			<groupId>blanco.commons.sql</groupId>
 			<artifactId>blanco-sqlformatter</artifactId>
-			<version>[2.0,4.0)</version>
-		</dependency>
-
-		<dependency>
-			<groupId>blanco.xml.bind</groupId>
-			<artifactId>blanco-xmlbinding</artifactId>
 			<version>[2.0,4.0)</version>
 		</dependency>
 
