@@ -184,15 +184,41 @@ public class BlancoDbQueryParserUtil {
                 } else if ("ORDERBY".equals(condition)) {
                     sb.append(" ORDER BY " + conditionStructure.getItem() + " ");
                 } else if ("BETWEEN".equals(condition)) {
-                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " BETWEEN ? AND ? )");
+                    BlancoDbDynamicConditionFunctionStructure function = conditionStructure.getFunction();
+                    if (function != null) {
+                        if (function.getDoTest()) {
+                            sb.append(conditionStructure.getLogical() + " ( " + function.getFunction() + " BETWEEN ? AND ? )");
+                        }
+                    } else {
+                        sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " BETWEEN ? AND ? )");
+                    }
                 } else if ("NOT BETWEEN".equals(condition)) {
-                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " NOT BETWEEN ? AND ? )");
+                    BlancoDbDynamicConditionFunctionStructure function = conditionStructure.getFunction();
+                    if (function != null) {
+                        if (function.getDoTest()) {
+                            sb.append(conditionStructure.getLogical() + " ( " + function.getFunction() + " NOT BETWEEN ? AND ? )");
+                        }
+                    } else {
+                        sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " NOT BETWEEN ? AND ? )");
+                    }
                 } else if ("IN".equals(condition)) {
-                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " IN ( ? ) ");
-                    sb.append(" )");
+                    BlancoDbDynamicConditionFunctionStructure function = conditionStructure.getFunction();
+                    if (function != null) {
+                        if (function.getDoTest()) {
+                            sb.append(conditionStructure.getLogical() + " ( " + function.getFunction() + " IN ( ? ) )");
+                        }
+                    } else {
+                        sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " IN ( ? ) )");
+                    }
                 } else if ("NOT IN".equals(condition)) {
-                    sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " NOT IN ( ? ) ");
-                    sb.append(" )");
+                    BlancoDbDynamicConditionFunctionStructure function = conditionStructure.getFunction();
+                    if (function != null) {
+                        if (function.getDoTest()) {
+                            sb.append(conditionStructure.getLogical() + " ( " + function.getFunction() + " NOT IN ( ? ) )");
+                        }
+                    } else {
+                        sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " NOT IN ( ? ) )");
+                    }
                 } else if ("COMPARE".equals(condition)) {
                     sb.append(conditionStructure.getLogical() + " ( " + conditionStructure.getItem() + " " + this.convertComparisonTermToSQL(conditionStructure.getComparison()) + " ? )");
                 } else {
@@ -220,9 +246,26 @@ public class BlancoDbQueryParserUtil {
             if ("BETWEEN".equals(found.getCondition()) ||
                     ("NOT BETWEEN".equals(found.getCondition()))) {
                 numPlace = 2;
+                if (found.getFunction() != null) {
+                    /* May be FUNCTION or IN or BETWEEN like condition. */
+                    if (found.getFunction().getDoTest()) {
+                        numPlace += found.getFunction().getParamNum();
+                    }
+                }
+            } else if ("IN".equals(found.getCondition()) ||
+                    "NOT IN".equals(found.getCondition())) {
+                if (found.getFunction() != null) {
+                    /* May be FUNCTION or IN or BETWEEN like condition. */
+                    if (found.getFunction().getDoTest()) {
+                        numPlace += found.getFunction().getParamNum();
+                    }
+                }
             } else if ("FUNCTION".equals(found.getCondition())) {
-                if (found.getFunction().getDoTest()) {
-                    numPlace = found.getFunction().getParamNum();
+                if (found.getFunction() != null) {
+                    /* May be FUNCTION or IN or BETWEEN like condition. */
+                    if (found.getFunction().getDoTest()) {
+                        numPlace = found.getFunction().getParamNum();
+                    }
                 }
             }
         }
@@ -290,8 +333,9 @@ public class BlancoDbQueryParserUtil {
                         + sqlInfo.getName() + "] is not connected.");
             }
 
-            if ("FUNCTION".equals(dynamicClause.getCondition())) {
-                final BlancoDbDynamicConditionFunctionStructure dynamicFunction = dynamicClause.getFunction();
+            final BlancoDbDynamicConditionFunctionStructure dynamicFunction = dynamicClause.getFunction();
+            if (dynamicFunction != null) {
+                /* has function like params proceeding. */
                 if (!dynamicFunction.getDoTest()) {
                     System.out.println(fBundle.getXml2javaclassInfo001(sqlInfo.getName(), dynamicFunction.getTag()));
                     maxNativeCol = Math.max(listNativeCol.get(0),
@@ -300,12 +344,18 @@ public class BlancoDbQueryParserUtil {
                             columnStructure);
                     continue;
                 }
+                int funcIndex = dynamicFunction.getParamNum();
                 for (int indexSearch = 0; indexSearch < listNativeCol.size(); indexSearch++) {
-                    final BlancoDbMetaDataColumnStructure functionColumnStructure = dynamicFunction.getDbColumnList().get(indexSearch);
                     maxNativeCol = Math.max(listNativeCol.get(indexSearch),
                             maxNativeCol);
-                    hashCol.put(String.valueOf(listNativeCol.get(indexSearch)),
-                            functionColumnStructure);
+                    if (indexSearch < funcIndex) {
+                        final BlancoDbMetaDataColumnStructure functionColumnStructure = dynamicFunction.getDbColumnList().get(indexSearch);
+                        hashCol.put(String.valueOf(listNativeCol.get(indexSearch)),
+                                functionColumnStructure);
+                    } else {
+                        hashCol.put(String.valueOf(listNativeCol.get(indexSearch)),
+                                columnStructure);
+                    }
                 }
             } else {
                 for (int indexSearch = 0; indexSearch < listNativeCol.size(); indexSearch++) {

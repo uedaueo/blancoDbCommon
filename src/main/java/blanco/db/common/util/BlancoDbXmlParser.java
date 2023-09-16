@@ -441,6 +441,17 @@ public class BlancoDbXmlParser {
                     columnStructure.setName(dynamicCondition.getTag());
                 }
                 dynamicCondition.setFunction(function);
+            } else if ("IN".equals(condition) ||
+                    "NOT IN".equals(condition) ||
+                    "BETWEEN".equals(condition) ||
+                    "NOT BETWEEN".equals(condition)) {
+                BlancoDbDynamicConditionFunctionStructure function = sqlInfo.getDynamicConditionFunctionMap().get(targetItem);
+                if (function != null) {
+                    for (BlancoDbMetaDataColumnStructure columnStructure : function.getDbColumnList()) {
+                        columnStructure.setName(dynamicCondition.getTag());
+                    }
+                    dynamicCondition.setFunction(function);
+                }
             }
 
             String comparison = BlancoStringUtil.null2Blank(
