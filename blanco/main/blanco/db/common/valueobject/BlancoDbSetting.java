@@ -173,6 +173,22 @@ public class BlancoDbSetting {
     private boolean fVerbose = false;
 
     /**
+     * micronaut向けに Row クラスに Introspected アノテーションを付与します
+     *
+     * フィールド: [addIntrospected]。
+     * デフォルト: [false]。
+     */
+    private boolean fAddIntrospected = false;
+
+    /**
+     * finalizeメソッドを生成しません。Java9以降は非推奨となっているのでデフォルト値を True とします。
+     *
+     * フィールド: [noFinalize]。
+     * デフォルト: [true]。
+     */
+    private boolean fNoFinalize = true;
+
+    /**
      * フィールド [TargetDir] の値を設定します。
      *
      * フィールドの説明: [出力先ディレクトリ。]。
@@ -674,6 +690,52 @@ public class BlancoDbSetting {
     }
 
     /**
+     * フィールド [addIntrospected] の値を設定します。
+     *
+     * フィールドの説明: [micronaut向けに Row クラスに Introspected アノテーションを付与します]。
+     *
+     * @param argAddIntrospected フィールド[addIntrospected]に設定する値。
+     */
+    public void setAddIntrospected(final boolean argAddIntrospected) {
+        fAddIntrospected = argAddIntrospected;
+    }
+
+    /**
+     * フィールド [addIntrospected] の値を取得します。
+     *
+     * フィールドの説明: [micronaut向けに Row クラスに Introspected アノテーションを付与します]。
+     * デフォルト: [false]。
+     *
+     * @return フィールド[addIntrospected]から取得した値。
+     */
+    public boolean getAddIntrospected() {
+        return fAddIntrospected;
+    }
+
+    /**
+     * フィールド [noFinalize] の値を設定します。
+     *
+     * フィールドの説明: [finalizeメソッドを生成しません。Java9以降は非推奨となっているのでデフォルト値を True とします。]。
+     *
+     * @param argNoFinalize フィールド[noFinalize]に設定する値。
+     */
+    public void setNoFinalize(final boolean argNoFinalize) {
+        fNoFinalize = argNoFinalize;
+    }
+
+    /**
+     * フィールド [noFinalize] の値を取得します。
+     *
+     * フィールドの説明: [finalizeメソッドを生成しません。Java9以降は非推奨となっているのでデフォルト値を True とします。]。
+     * デフォルト: [true]。
+     *
+     * @return フィールド[noFinalize]から取得した値。
+     */
+    public boolean getNoFinalize() {
+        return fNoFinalize;
+    }
+
+    /**
      * Gets the string representation of this value object.
      *
      * <P>Precautions for use</P>
@@ -710,6 +772,8 @@ public class BlancoDbSetting {
         buf.append(",targetStyle=" + fTargetStyle);
         buf.append(",lineSeparator=" + fLineSeparator);
         buf.append(",verbose=" + fVerbose);
+        buf.append(",addIntrospected=" + fAddIntrospected);
+        buf.append(",noFinalize=" + fNoFinalize);
         buf.append("]");
         return buf.toString();
     }
@@ -798,5 +862,11 @@ public class BlancoDbSetting {
         // Name: fVerbose
         // Type: boolean
         target.fVerbose = this.fVerbose;
+        // Name: fAddIntrospected
+        // Type: boolean
+        target.fAddIntrospected = this.fAddIntrospected;
+        // Name: fNoFinalize
+        // Type: boolean
+        target.fNoFinalize = this.fNoFinalize;
     }
 }
